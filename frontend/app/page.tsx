@@ -9,25 +9,26 @@ import type { Metadata } from "next";
 
 // Declare the frame
 const initialFrame: Frame = {
-  image: "https://picsum.photos/seed/frames.js/1146/600",
+  image: `${process.env.NEXT_PUBLIC_HOST}/frame1.png`,
   version: "vNext",
   buttons: [
     {
-      label: "Random image",
+      label: "Submit Entry",
       action: "post",
     },
   ],
-  postUrl: `${process.env.NEXT_PUBLIC_HOST}/frames`,
+  inputText: "Enter your dad joke here",
+  postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/submitEntry`,
 };
 
 // Export Next.js metadata
 export const metadata: Metadata = {
-  title: "Random Image Frame",
-  description: "This is an example of a simple frame using frames.js",
+  title: "Frames-64 Game",
+  description: "This is a Tournament & Prediction Game on Farcaster Frames.",
   openGraph: {
     images: [
       {
-        url: "https://picsum.photos/seed/frames.js/600",
+        url: `${process.env.NEXT_PUBLIC_HOST}/frame1.png`,
       },
     ],
   },
