@@ -32,3 +32,7 @@ This being a game , we could also use OpenFort directly , which provides normal 
 **Airstack** - maybe some data related to the user about farcaster to assign this
 **OpenFort** - Specifically for gaming contract interactions , could be tried out
 **Stack** - to track the points , it is always better to make it on chain
+
+## Flow 1
+
+-> Create a Contest
