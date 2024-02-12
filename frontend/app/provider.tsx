@@ -1,4 +1,5 @@
 "use client";
+
 import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
@@ -13,11 +14,7 @@ const config = getDefaultConfig({
 
 const queryClient = new QueryClient();
 
-export default function Provider({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Provider({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
