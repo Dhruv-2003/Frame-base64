@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="py-32">
+    <main>
       <div className="flex min-h-screen flex-col items-center justify-start py-20 gap-12 bg-[#121312] relative">
         <Image
           src={waves1}
