@@ -21,7 +21,7 @@ export const getCompetitorEntries = async () => {
         }
       }
     } while (cursor !== 0);
-
+    console.log(userIds, entries);
     return { userIds, entries };
   } catch (error) {
     console.error("Error retrieving entries:", error);

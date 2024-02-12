@@ -6,6 +6,19 @@ import {
 } from "frames.js";
 import { NextRequest } from "next/server";
 import { kv } from "@vercel/kv";
+import { getCompetitorEntries } from "../../../utils/kv";
+
+export async function GET(request: NextRequest) {
+  try {
+    const { userIds, entries } = await getCompetitorEntries();
+    console.log(userIds, entries);
+    return new Response(JSON.stringify({ userIds, entries }), {
+      status: 200,
+    });
+  } catch (error: any) {
+    return new Response(error, { status: 500 });
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
