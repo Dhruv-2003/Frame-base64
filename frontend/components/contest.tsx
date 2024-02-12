@@ -143,8 +143,10 @@ export default function Contest() {
 
   return (
     <div className=" z-10 text-white space-y-10">
-      <h1 className=" text-6xl font-semibold text-center">Frames 64 </h1>
-      <ConnectButton />
+      <div className=" flex items-center justify-between w-full md:max-w-7xl mx-auto">
+        <h1 className=" text-6xl font-semibold text-center">Frames 64 </h1>
+        <ConnectButton />
+      </div>
       <div className="flex text-center items-center justify-between w-screen p-12 relative">
         {/* round 1 */}
         <div className=" space-y-12 ">
@@ -201,8 +203,26 @@ export default function Contest() {
         </div>
         {/* final winner */}
         <div className=" space-y-4">
-          <div className=" text-2xl text-center font-semibold">Winner</div>
-          <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
+          <div className=" text-2xl text-center font-semibold">Final Round</div>
+
+          <div
+            className={` ${
+              !finalWinner && "border-x"
+            } flex flex-col items-center gap-5  border-white px-4`}
+          >
+            {/* {!finalWinner &&
+              finalists.map((member, index) => (
+                <div
+                  key={index}
+                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    finalWinner === member ? "opacity-50" : ""
+                  }`}
+                  onClick={() => handleFinalWinner(member)}
+                >
+                  {member}
+                </div>
+              ))} */}
+
             {finalists.map((member, index) => (
               <div
                 key={index}
@@ -214,13 +234,19 @@ export default function Contest() {
                 {member}
               </div>
             ))}
+
+            {finalWinner && (
+              <div className=" space-y-4">
+                <div className=" text-2xl text-center font-semibold">
+                  Winner
+                </div>
+                <div className=" w-40 bg-white rounded-xl  p-3 text-black">
+                  {finalWinner}
+                </div>
+              </div>
+            )}
           </div>
           <br />
-          {finalWinner && (
-            <div className=" w-40 bg-white rounded-xl  p-3 text-black">
-              {finalWinner}
-            </div>
-          )}
         </div>
 
         {/* <div className=" w-40 bg-white rounded-xl  p-3 text-black"></div> */}
