@@ -8,6 +8,7 @@ import { Frame, getFrameFlattened } from "frames.js";
 import type { Metadata } from "next";
 import { useState } from "react";
 import Contest from "../components/contest";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 // Declare the frame
 const initialFrame: Frame = {
@@ -51,7 +52,8 @@ export default function Home() {
           alt="farcaster"
           className="absolute left-0 top-0 -z-11 w-[1000px] "
         />
-        <Contest />
+        {/* <ConnectButton />c */}
+        {/* <Contest /> */}
       </div>
       <main className="py-32">
         <div className=" flex min-h-screen flex-col items-center justify-center gap-12">

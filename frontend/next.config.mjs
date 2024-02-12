@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["http://localhost:3000"],
+    remotePatterns: [
+      {
+        hostname: "http://localhost:3000",
+      },
+    ],
   },
 };
 
