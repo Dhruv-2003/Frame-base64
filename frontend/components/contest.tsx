@@ -6,6 +6,7 @@ import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { TOURANMENT_ABI, TOURNAMENT_ADDRESS } from "../constants/tournament";
 import { getTournamentInfo } from "../utils/graph";
 import { getUserDataForFid } from "frames.js";
+import { getCompetitorEntries } from "../utils/kv";
 
 export default function Contest() {
   const { address: account } = useAccount();
@@ -68,6 +69,16 @@ export default function Contest() {
 
   const submitEntry = async (entry: bigint[][]) => {
     try {
+      const mockEntry = [
+        [
+          roundOneTeamOneWinner,
+          roundOneTeamTwoWinner,
+          roundOneTeamThreeWinner,
+          roundOneTeamFourWinner,
+        ],
+        [roundTwoTeamOneWinner, roundTwoTeamTwoWinner],
+        [finalWinner],
+      ];
       // prepare the data
       if (!publicClient) {
         return;
@@ -125,7 +136,9 @@ export default function Contest() {
   };
 
   useEffect(() => {
-    getTournamentsInfo();
+    if (!tournamentInfo) {
+      getTournamentsInfo();
+    }
   }, []);
 
   return (
