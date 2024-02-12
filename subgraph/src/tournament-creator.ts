@@ -1,39 +1,30 @@
 import {
   tournamentCreated as tournamentCreatedEvent,
-  tournamentInitialised as tournamentInitialisedEvent
-} from "../generated/TournamentCreator/TournamentCreator"
-import { tournamentCreated, tournamentInitialised } from "../generated/schema"
+  tournamentInitialised as tournamentInitialisedEvent,
+} from "../generated/TournamentCreator/TournamentCreator";
+import { Tournamet } from "../generated/schema";
 
 export function handletournamentCreated(event: tournamentCreatedEvent): void {
-  let entity = new tournamentCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.tournament = event.params.tournament
-  entity.compProvider = event.params.compProvider
-  entity.resultOracle = event.params.resultOracle
-  entity.uri = event.params.uri
-  entity.tournamentId = event.params.tournamentId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let entity = new Tournamet(event.params.tournamentId.toString());
+  entity.tournamentAddress = event.params.tournament;
+  entity.compProviderAddress = event.params.compProvider;
+  entity.resultProviderAddress = event.params.resultOracle;
+  entity.tournamentURI = event.params.uri;
+  entity.tournamentId = event.params.tournamentId;
+  entity.save();
 }
 
 export function handletournamentInitialised(
   event: tournamentInitialisedEvent
 ): void {
-  let entity = new tournamentInitialised(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.tournamentId = event.params.tournamentId
-  entity.compIDs = event.params.compIDs
-  entity.compURIs = event.params.compURIs
+  let entity = Tournamet.load(event.params.tournamentId.toString());
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  if (!entity) {
+    return;
+  }
 
-  entity.save()
+  entity.compIDs = event.params.compIDs;
+  entity.compURIs = event.params.compURIs;
+
+  entity.save();
 }

@@ -1,19 +1,19 @@
 {
   "base-sepolia": {
     "TournamentCreator": {
-      "address": "0xa2484ed60a4e9458bbae7efe12c1d25394d97450",
+      "address": "0x95b7dD6016aa284720DE1a2ef6acaae6afab8F90",
       "startBlock": 5952122
     },
     "Tournament": {
-      "address": "0x5Ae0619266275756c4b1C01C73204292a77937c9",
+      "address": "0xB47B6914F377F469336D893A64dC4eBB1AadED02",
       "startBlock": 5952195
     },
     "CompetitionProvider": {
-      "address": "0x8424a96a9ea9D7f77b1D1a349081183656Df6B59",
+      "address": "0x5ba843aB72c27EaAf128805dCFb3190148d053CE",
       "startBlock": 5952195
     },
     "ResultProvider": {
-      "address": "0x733989b2eD55bF0EC5e1f895f1E50A8907eE8c9a",
+      "address": "0x8237DE0706D481F30247912c4c84eEE5eDDf289B",
       "startBlock": 5952195
     }
   }

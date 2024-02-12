@@ -165,4 +165,4 @@ export const TOURNAMENT_CREATOR_ABI = [
 ] as const;
 
 export const TOURNAMENT_CREATOR_ADDRESS =
-  "0xa2484ed60a4e9458bbae7efe12c1d25394d97450";
+  "0x95b7dD6016aa284720DE1a2ef6acaae6afab8F90";

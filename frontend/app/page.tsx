@@ -12,7 +12,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 // Declare the frame
 const initialFrame: Frame = {
-  image: `${process.env.NEXT_PUBLIC_HOST}/frame1.png`,
+  image: `${process.env.NEXT_PUBLIC_HOST}/Welcome.png`,
   version: "vNext",
   buttons: [
     {
@@ -21,7 +21,7 @@ const initialFrame: Frame = {
     },
   ],
   inputText: "Enter your dad joke here",
-  postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/submitEntry`,
+  postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/entries`,
 };
 
 // Export Next.js metadata
@@ -254,20 +254,45 @@ export default function Home() {
               <Image src={farcaster} alt="farcaster" className="h-20 w-20" />
             </div>
             <div className=" text-white z-10 text-center space-y-4">
-              <h1 className="text-4xl font-bold ">Title Here</h1>
+              <h1 className="text-4xl font-bold ">Entries Closed !!</h1>
               <p className=" max-w-md">
-                Description here, Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Possimus numquam corrupti, suscipit quibusdam
-                maiores nostrum quia beatae nisi voluptatum mollitia aperiam
-                deleniti. Blanditiis doloribus voluptate saepe rerum hic
-                sapiente vel!
+                Time's up! We've reached our punny quota for this round. But
+                don't fret, there's always room for more laughs in the next
+                contest!
               </p>
             </div>
+          </div>
+          <div className=" max-w-5xl">
+            <img
+              width={910}
+              height={476}
+              src={"/api/images/contest/participants"}
+              alt="frame2"
+            />
           </div>
         </div>
       </main>
     </>
   );
+}
+
+{
+  /* <div className=" text-white z-10 text-center space-y-4">
+  <h1 className="text-4xl font-bold ">❌ Invalid Entry !!</h1>
+  <p className=" max-w-md">
+    Whoops! Your joke seems to be lost in translation. Time to recalibrate that
+    humor compass and give it another shot!
+  </p>
+</div>; */
+}
+{
+  /* <div className=" text-white z-10 text-center space-y-4">
+  <h1 className="text-4xl font-bold ">❌ Duplicate Entry !!</h1>
+  <p className=" max-w-md">
+    Hold your horses! You've already entered the contest with a joke. Let's keep
+    it fresh and pun-tastic!
+  </p>
+</div>; */
 }
 
 //  <Image

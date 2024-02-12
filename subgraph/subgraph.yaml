@@ -6,7 +6,7 @@ dataSources:
     name: TournamentCreator
     network: base-sepolia
     source:
-      address: "0xa2484ed60a4e9458bbae7efe12c1d25394d97450"
+      address: "0x95b7dD6016aa284720DE1a2ef6acaae6afab8F90"
       abi: TournamentCreator
       startBlock: 0
     mapping:
@@ -14,8 +14,7 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - tournamentCreated
-        - tournamentInitialised
+        - Tournament
       abis:
         - name: TournamentCreator
           file: ./abis/TournamentCreator.json

@@ -16,7 +16,7 @@ contract OracleCompetitorProvider is CompetitorProvider, Owned {
 
     constructor() Owned(msg.sender) {}
 
-    function initalize(uint256[] memory ids, string[] memory uris) public onlyOwner {
+    function initalize(uint256[] memory ids, string[] memory uris) public {
         require(uris.length == ids.length, "INVALID_NUM_URIS");
 
         uint256 powerOfTwo = _getPowerOfTwo(ids.length);

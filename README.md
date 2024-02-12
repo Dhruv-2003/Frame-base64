@@ -35,4 +35,28 @@ This being a game , we could also use OpenFort directly , which provides normal 
 
 ## Flow 1
 
--> Create a Contest
+-> Post the Contest from the official handle
+-> Accept the entry , store them in kv
+-> Close the entry on 8 submissions
+-> Handle any errors
+
+-> Final entries will be checked and then initialize the Competitors
+
+## Flow 2
+
+-> New frame will be posted from the account , a contest frame
+-> Users can vote from the website , the data of all then competitiors and their entries is fetched from the subgraph
+-> We present all the competitors directly on the website , might need to fetch the username and other data for the competitors
+-> Prepare the predictions and then submit to contract
+
+## Flow 3
+
+-> Later the admin has to be advanced , the results are announced
+-> We release a result frame , which will have all the results in some or other frames
+
+// WE could optionally add round infos , about all the competitors
+
+## Tasks
+
+- Create the dynamic frame images
+- Store the needed data on Vercel

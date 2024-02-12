@@ -2,8 +2,13 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { useState } from "react";
+import { useAccount, usePublicClient, useWalletClient } from "wagmi";
+import { TOURANMENT_ABI, TOURNAMENT_ADDRESS } from "../constants/tournament";
 
 export default function Contest() {
+  const { address: account } = useAccount();
+  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
   const roundOneteamOneMembers = ["John", "Alice"];
   const roundOneteamTwoMembers = ["Charlie", "Diana"];
   const roundOneteamThreeMembers = ["Ram", "Lakshman"];
@@ -23,9 +28,9 @@ export default function Contest() {
   const [roundTwoTeamOneWinner, setRoundTwoTeamOneWinner] = useState("");
   const [roundTwoTeamTwoWinner, setRoundTwoTeamTwoWinner] = useState("");
 
-  const finalists = [roundTwoTeamOneWinner, roundTwoTeamTwoWinner];
+  const [finalWinner, setFinalWinner] = useState("");
 
-  const finalWinner = finalists[Math.round(Math.random())];
+  const finalists = [roundTwoTeamOneWinner, roundTwoTeamTwoWinner];
 
   //   round one handle functions
   const handleRoundOneTeamOneWinner = (winner: string) => {
@@ -51,6 +56,44 @@ export default function Contest() {
 
   const handleRoundTwoTeamTwoWinner = (winner: string) => {
     setRoundTwoTeamTwoWinner(winner);
+  };
+
+  const handleFinalWinner = (winner: string) => {
+    setFinalWinner(winner);
+  };
+
+  const submitEntry = async () => {
+    try {
+      // prepare the data
+      if (!publicClient) {
+        return;
+      }
+      const data = await publicClient.simulateContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "submitEntry",
+        args: [],
+      });
+
+      if (!walletClient) {
+        return;
+      }
+
+      const tx = await walletClient.writeContract(data.request);
+      console.log("Transaction Sent");
+      const transaction = await publicClient.waitForTransactionReceipt({
+        hash: tx,
+      });
+      console.log(transaction);
+      console.log(data.result);
+      return {
+        transaction,
+        data,
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -115,12 +158,27 @@ export default function Contest() {
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Winner</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
+            {finalists.map((member, index) => (
+              <div
+                key={index}
+                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                  finalWinner === member ? "opacity-50" : ""
+                }`}
+                onClick={() => handleFinalWinner(member)}
+              >
+                {member}
+              </div>
+            ))}
+          </div>
+          <br />
+          {finalWinner && (
             <div className=" w-40 bg-white rounded-xl  p-3 text-black">
               {finalWinner}
             </div>
-          </div>
+          )}
         </div>
 
+        {/* <div className=" w-40 bg-white rounded-xl  p-3 text-black"></div> */}
         {/* right round 2 */}
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Round 2</div>
@@ -176,13 +234,13 @@ export default function Contest() {
           </div>
         </div>
         {/* left */}
-        <div className=" w-[104px] border-t border-white absolute left-[15.6vw]" />
+        {/* <div className=" w-[104px] border-t border-white absolute left-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] left-[36.1vw]" />
-        <div className=" w-[104px] border-t border-white absolute top-[30.2vh] left-[15.6vw]" />
+        <div className=" w-[104px] border-t border-white absolute top-[30.2vh] left-[15.6vw]" /> */}
         {/* right */}
-        <div className=" w-[104px] border-t border-white absolute right-[15.6vw]" />
+        {/* <div className=" w-[104px] border-t border-white absolute right-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] right-[36.1vw]" />
-        <div className=" w-[104px] border-t border-white absolute top-[30.2vh] right-[15.6vw]" />
+        <div className=" w-[104px] border-t border-white absolute top-[30.2vh] right-[15.6vw]" /> */}
       </div>
     </div>
   );
