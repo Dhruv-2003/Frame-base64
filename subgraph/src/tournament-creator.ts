@@ -2,10 +2,10 @@ import {
   tournamentCreated as tournamentCreatedEvent,
   tournamentInitialised as tournamentInitialisedEvent,
 } from "../generated/TournamentCreator/TournamentCreator";
-import { Tournamet } from "../generated/schema";
+import { Tournament } from "../generated/schema";
 
 export function handletournamentCreated(event: tournamentCreatedEvent): void {
-  let entity = new Tournamet(event.params.tournamentId.toString());
+  let entity = new Tournament(event.params.tournamentId.toString());
   entity.tournamentAddress = event.params.tournament;
   entity.compProviderAddress = event.params.compProvider;
   entity.resultProviderAddress = event.params.resultOracle;
@@ -17,7 +17,7 @@ export function handletournamentCreated(event: tournamentCreatedEvent): void {
 export function handletournamentInitialised(
   event: tournamentInitialisedEvent
 ): void {
-  let entity = Tournamet.load(event.params.tournamentId.toString());
+  let entity = Tournament.load(event.params.tournamentId.toString());
 
   if (!entity) {
     return;

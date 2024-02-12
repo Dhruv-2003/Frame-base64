@@ -103,7 +103,9 @@ abstract contract Tournament is Owned {
     constructor(CompetitorProvider cp, ResultProvider rp) Owned(msg.sender) {
         _competitorProvider = cp;
         resultProvider = rp;
+    }
 
+    function initialise() public onlyOwner {
         // Initialize the bracket.
         uint256[] memory competitorIDs = _competitorProvider.listCompetitorIDs();
         uint256 competitorsLeft = competitorIDs.length;

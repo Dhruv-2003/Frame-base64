@@ -1,5 +1,9 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -65,13 +69,23 @@
   {
     "inputs": [],
     "name": "admin",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "tournamentURI", "type": "string" }
+      {
+        "internalType": "string",
+        "name": "tournamentURI",
+        "type": "string"
+      }
     ],
     "name": "createTournament",
     "outputs": [],
@@ -80,9 +94,21 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tournamentId", "type": "uint256" },
-      { "internalType": "uint256[]", "name": "compIDs", "type": "uint256[]" },
-      { "internalType": "string[]", "name": "compURIs", "type": "string[]" }
+      {
+        "internalType": "uint256",
+        "name": "tournamentId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "compIDs",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "compURIs",
+        "type": "string[]"
+      }
     ],
     "name": "initialiseTournament",
     "outputs": [],
@@ -92,18 +118,46 @@
   {
     "inputs": [],
     "name": "totalTournaments",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "tournaments",
     "outputs": [
-      { "internalType": "address", "name": "tournament", "type": "address" },
-      { "internalType": "address", "name": "compProvider", "type": "address" },
-      { "internalType": "address", "name": "resultOracle", "type": "address" },
-      { "internalType": "string", "name": "uri", "type": "string" }
+      {
+        "internalType": "address",
+        "name": "tournament",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "compProvider",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "resultOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
     ],
     "stateMutability": "view",
     "type": "function"

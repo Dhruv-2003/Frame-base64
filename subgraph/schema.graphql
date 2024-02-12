@@ -20,7 +20,7 @@
 #   transactionHash: Bytes!
 # }
 
-type Tournamet @entity {
+type Tournament @entity {
   id: String!
   tournamentId: BigInt! # uint256
   tournamentAddress: Bytes!
