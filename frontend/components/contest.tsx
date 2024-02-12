@@ -67,8 +67,9 @@ export default function Contest() {
     setFinalWinner(winner);
   };
 
-  const submitEntry = async (entry: bigint[][]) => {
+  const submitEntry = async () => {
     try {
+      let entry: bigint[][] = [];
       const mockEntry = [
         [
           roundOneTeamOneWinner,
@@ -303,6 +304,9 @@ export default function Contest() {
               ))}
             </div>
           </div>
+        </div>
+        <div>
+          <button onClick={() => submitEntry()}>Submit</button>
         </div>
         {/* left */}
         {/* <div className=" w-[104px] border-t border-white absolute left-[15.6vw]" />
