@@ -1,5 +1,6 @@
 "use client";
 
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import React, { useState } from "react";
 
 export default function Contest() {
@@ -54,7 +55,8 @@ export default function Contest() {
 
   return (
     <div className=" z-10 text-white space-y-10">
-      <h1 className=" text-6xl font-semibold text-center">Frames 64</h1>
+      <h1 className=" text-6xl font-semibold text-center">Frames 64 </h1>
+      <ConnectButton />
       <div className="flex text-center items-center justify-between w-screen p-12 relative">
         {/* round 1 */}
         <div className=" space-y-12 ">
