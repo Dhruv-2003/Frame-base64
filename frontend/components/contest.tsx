@@ -1,14 +1,18 @@
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { TOURANMENT_ABI, TOURNAMENT_ADDRESS } from "../constants/tournament";
+import { getTournamentInfo } from "../utils/graph";
+import { getUserDataForFid } from "frames.js";
 
 export default function Contest() {
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+
+  const [tournamentInfo, setTournamentInfo] = useState<any>();
   const roundOneteamOneMembers = ["John", "Alice"];
   const roundOneteamTwoMembers = ["Charlie", "Diana"];
   const roundOneteamThreeMembers = ["Ram", "Lakshman"];
@@ -62,7 +66,7 @@ export default function Contest() {
     setFinalWinner(winner);
   };
 
-  const submitEntry = async () => {
+  const submitEntry = async (entry: bigint[][]) => {
     try {
       // prepare the data
       if (!publicClient) {
@@ -73,7 +77,7 @@ export default function Contest() {
         address: TOURNAMENT_ADDRESS,
         abi: TOURANMENT_ABI,
         functionName: "submitEntry",
-        args: [],
+        args: [entry],
       });
 
       if (!walletClient) {
@@ -95,6 +99,34 @@ export default function Contest() {
       console.log(error);
     }
   };
+
+  const getUsersInfo = async () => {};
+
+  const getTournamentsInfo = async () => {
+    try {
+      const data = await getTournamentInfo("2");
+      console.log(data);
+      setTournamentInfo(data.tournamet);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserFarcasterInfo = async (fid: number) => {
+    try {
+      // Optional to use Airstack , or Neynar API if needed
+      const userData = await getUserDataForFid({ fid });
+
+      console.log(userData);
+      return userData;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTournamentsInfo();
+  }, []);
 
   return (
     <div className=" z-10 text-white space-y-10">

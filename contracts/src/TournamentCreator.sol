@@ -13,7 +13,7 @@ contract TournamentCreator {
         string uri;
     }
 
-    uint256 public totalTournaments = 1;
+    uint256 public totalTournaments;
     mapping(uint256 => Tournament) public tournaments;
 
     address public admin;
@@ -59,7 +59,10 @@ contract TournamentCreator {
         onlyAdmin
     {
         OracleCompetitorProvider compProvider = OracleCompetitorProvider(tournaments[tournamentId].compProvider);
+        StaticOracleTournament tournament = StaticOracleTournament(tournaments[tournamentId].tournament);
         compProvider.initalize(compIDs, compURIs);
+        tournament.initialise();
+
         emit tournamentInitialised(tournamentId, compIDs, compURIs);
     }
 }
