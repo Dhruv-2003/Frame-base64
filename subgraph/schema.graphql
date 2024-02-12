@@ -1,0 +1,80 @@
+type tournamentCreated @entity(immutable: true) {
+  id: Bytes!
+  tournament: Bytes! # address
+  compProvider: Bytes! # address
+  resultOracle: Bytes! # address
+  uri: String! # string
+  tournamentId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type tournamentInitialised @entity(immutable: true) {
+  id: Bytes!
+  tournamentId: BigInt! # uint256
+  compIDs: [BigInt!]! # uint256[]
+  compURIs: [String!]! # string[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+# type Tournamets @enity {
+#   id: Bytes!
+#   tournamentAddress: Bytes!
+#   compAddress: Bytes!
+#   resultAddress: Bytes!
+# }
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type entryClosed @entity(immutable: true) {
+  id: Bytes!
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type entrySubmitted @entity(immutable: true) {
+  id: Bytes!
+  entry: [[BigInt!]]! # uint256[][]
+  participant: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type roundResult @entity(immutable: true) {
+  id: Bytes!
+  winnerId: BigInt! # uint256
+  loserId: BigInt! # uint256
+  metadata: String! # string
+  round: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type roundStarted @entity(immutable: true) {
+  id: Bytes!
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type tournamentFinished @entity(immutable: true) {
+  id: Bytes!
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

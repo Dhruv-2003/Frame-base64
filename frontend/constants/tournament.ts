@@ -2,7 +2,7 @@ export const TOURANMENT_ABI = [
   {
     inputs: [
       {
-        internalType: "contract StaticCompetitorProvider",
+        internalType: "contract OracleCompetitorProvider",
         name: "provider",
         type: "address",
       },
