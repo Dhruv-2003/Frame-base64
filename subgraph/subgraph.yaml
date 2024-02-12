@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: TournamentCreator
+    network: base-sepolia
+    source:
+      address: "0xa2484ed60a4e9458bbae7efe12c1d25394d97450"
+      abi: TournamentCreator
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - tournamentCreated
+        - tournamentInitialised
+      abis:
+        - name: TournamentCreator
+          file: ./abis/TournamentCreator.json
+      eventHandlers:
+        - event: tournamentCreated(address,address,address,string,uint256)
+          handler: handletournamentCreated
+        - event: tournamentInitialised(uint256,uint256[],string[])
+          handler: handletournamentInitialised
+      file: ./src/tournament-creator.ts
