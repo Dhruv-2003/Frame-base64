@@ -35,20 +35,20 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    // <main className="py-32">
-    <div className="flex min-h-screen flex-col items-center justify-start py-20 gap-12 bg-[#121312] relative">
-      <Image
-        src={waves1}
-        alt="farcaster"
-        className="z-0 absolute bottom-0 right-0 w-[1200px] "
-      />
-      <Image
-        src={waves2}
-        alt="farcaster"
-        className="absolute left-0 top-0 -z-11 w-[1000px] "
-      />
-      <Contest />
-    </div>
-    // </main>
+    <main>
+      <div className="flex min-h-screen flex-col items-center justify-start py-20 gap-12 bg-[#121312] relative">
+        <Image
+          src={waves1}
+          alt="farcaster"
+          className="z-0 absolute bottom-0 right-0 w-[1200px] "
+        />
+        <Image
+          src={waves2}
+          alt="farcaster"
+          className="absolute left-0 top-0 -z-11 w-[1000px] "
+        />
+        <Contest />
+      </div>
+    </main>
   );
 }
