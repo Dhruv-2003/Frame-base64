@@ -266,7 +266,7 @@ export default function Home() {
             <Image src={frame2} alt="frame2" />
           </div>
 
-          <div className=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
+          {/* <div className=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
             <div className="absolute top-0 left-0 w-[640px]">
               <svg
                 width="640"
@@ -307,15 +307,15 @@ export default function Home() {
                 contest!
               </p>
             </div>
-          </div>
-          <div className=" max-w-5xl">
+          </div> */}
+          {/* <div className=" max-w-5xl">
             <img
               width={910}
               height={476}
               src={"/api/images/contest/participants"}
               alt="frame2"
             />
-          </div>
+          </div> */}
         </div>
       </main>
     </>
