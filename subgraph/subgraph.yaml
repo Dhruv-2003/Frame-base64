@@ -6,9 +6,9 @@ dataSources:
     name: TournamentCreator
     network: base-sepolia
     source:
-      address: "0xcb56CD817eE7404d400f2F3d4241CB94d4f91FdB"
+      address: "0x2e23eD115853411e117B59431f8Ee27AAE4e27d9"
       abi: TournamentCreator
-      startBlock: 5995140
+      startBlock: 6024096
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

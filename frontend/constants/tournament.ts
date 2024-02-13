@@ -252,6 +252,13 @@ export const TOURANMENT_ABI = [
   },
   {
     inputs: [],
+    name: "initialise",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "listParticipants",
     outputs: [
       {
@@ -343,4 +350,4 @@ export const TOURANMENT_ABI = [
   },
 ] as const;
 
-export const TOURNAMENT_ADDRESS = "0xcc44f9018641A7C2287507581BCa6fb390e87199";
+export const TOURNAMENT_ADDRESS = "0xF4F5f8d6962A3DFec144400B2b65c193813C6CBE";

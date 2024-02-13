@@ -63,6 +63,9 @@ contract TournamentCreator {
         compProvider.initalize(compIDs, compURIs);
         tournament.initialise();
 
+        tournament.transferOwnership(admin);
+        compProvider.transferOwnership(admin);
+
         emit tournamentInitialised(tournamentId, compIDs, compURIs);
     }
 }

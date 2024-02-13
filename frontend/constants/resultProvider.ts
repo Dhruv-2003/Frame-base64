@@ -146,4 +146,4 @@ export const RESULTS_ABI = [
   },
 ] as const;
 
-export const RESULTS_ADDRESS = "0x36d5cfF613c8D0616a2dbF3c6e4Ca46a0fb39671";
+export const RESULTS_ADDRESS = "0x33092e29947055bbC466E2BC85009e6412538105";

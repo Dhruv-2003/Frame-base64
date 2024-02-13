@@ -116,10 +116,10 @@ export default function Contest() {
 
   const getTournamentsInfo = async () => {
     try {
-      const data = await getTournamentInfo("2");
+      const data = await getTournamentInfo("1");
       console.log(data);
       setTournamentInfo(data.tournamet);
-      await fetch("/api/entries");
+      // await fetch("/api/entries");
     } catch (error) {
       console.log(error);
     }
