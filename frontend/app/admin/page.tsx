@@ -103,6 +103,13 @@ export default function Home() {
       });
 
       console.log(txdata);
+      const noRounds = await publicClient.readContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "numRounds",
+      });
+      console.log(noRounds);
     } catch (error) {
       console.log(error);
     }

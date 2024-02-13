@@ -23,12 +23,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    console.log(body);
 
     // Parse and validate the frame message
-    // const { isValid, message } = await validateFrameMessage(body);
-    // if (!isValid || !message) {
-    //   return new Response("Invalid message", { status: 400 });
-    // }
+    const { isValid, message } = await validateFrameMessage(body);
+    console.log(message);
+    if (!isValid || !message) {
+      return new Response("Invalid message", { status: 400 });
+    }
 
     const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
     const frameMessage = await getFrameMessage(body);

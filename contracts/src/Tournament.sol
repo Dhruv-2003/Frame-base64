@@ -142,19 +142,19 @@ abstract contract Tournament is Owned {
 
     // Submits an entry to the Tournament prediction market. The entry must consist of N-1 rounds, where N
     // is the number of rounds in the Tournament. An address may submit at most one entry.
-    function submitEntry(uint256[][] memory entry) public virtual {
-        require(_entries[msg.sender].length == 0, "ALREADY_SUBMITTED");
+    function submitEntry(uint256[][] memory entry, address sender) public virtual {
+        require(_entries[sender].length == 0, "ALREADY_SUBMITTED");
         require(state == State.AcceptingEntries, "TOURNAMENT_NOT_ACCEPTING_ENTRIES");
 
         _validateEntry(entry);
 
-        _entries[msg.sender] = entry;
+        _entries[sender] = entry;
 
-        Participant memory p = Participant(msg.sender, 0);
+        Participant memory p = Participant(sender, 0);
 
-        _participantMap[msg.sender] = p;
-        _participants.push(msg.sender);
-        emit entrySubmitted(entry, msg.sender);
+        _participantMap[sender] = p;
+        _participants.push(sender);
+        emit entrySubmitted(entry, sender);
     }
 
     // Returns an entry for a given address.

@@ -6,7 +6,16 @@ import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { TOURANMENT_ABI, TOURNAMENT_ADDRESS } from "../constants/tournament";
 import { getTournamentInfo } from "../utils/graph";
 import { getUserDataForFid } from "frames.js";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { getCompetitorEntries } from "../utils/kv";
+import { Button } from "@/components/ui/button";
+import { createPublicClient, createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { baseSepolia } from "viem/chains";
 
 interface userDataType {
   displayName: string;
@@ -16,6 +25,10 @@ interface userDataType {
   username: string;
   bio: string;
 }
+
+const tournamentId = "1";
+
+const PRIVATE_KEY = process.env.NEXT_PUBLIC_PRIVATE_KEY;
 
 export default function Contest() {
   const { address: account } = useAccount();
@@ -61,6 +74,8 @@ export default function Contest() {
 
   const finalists = [roundTwoTeamOneWinner, roundTwoTeamTwoWinner];
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   //   round one handle functions
   const handleRoundOneTeamOneWinner = (winner: userDataType) => {
     setRoundOneTeamOneWinner(winner);
@@ -105,42 +120,45 @@ export default function Contest() {
       ) {
         const mockEntry = [
           [
-            roundOneTeamOneWinner?.fid,
-            roundOneTeamTwoWinner?.fid,
-            roundOneTeamThreeWinner?.fid,
-            roundOneTeamFourWinner?.fid,
+            BigInt(roundOneTeamOneWinner?.fid),
+            BigInt(roundOneTeamTwoWinner?.fid),
+            BigInt(roundOneTeamThreeWinner?.fid),
+            BigInt(roundOneTeamFourWinner?.fid),
           ],
-          [roundTwoTeamOneWinner?.fid, roundTwoTeamTwoWinner?.fid],
+          [
+            BigInt(roundTwoTeamOneWinner?.fid),
+            BigInt(roundTwoTeamTwoWinner?.fid),
+          ],
           [BigInt(finalWinner?.fid)],
         ];
         console.log(mockEntry);
-        // // prepare the data
-        // if (!publicClient) {
-        //   return;
-        // }
-        // const data = await publicClient.simulateContract({
-        //   account,
-        //   address: TOURNAMENT_ADDRESS,
-        //   abi: TOURANMENT_ABI,
-        //   functionName: "submitEntry",
-        //   args: [entry],
-        // });
+        // prepare the data
+        if (!publicClient) {
+          return;
+        }
+        const data = await publicClient.simulateContract({
+          account,
+          address: TOURNAMENT_ADDRESS,
+          abi: TOURANMENT_ABI,
+          functionName: "submitEntry",
+          args: [mockEntry],
+        });
 
-        // if (!walletClient) {
-        //   return;
-        // }
+        if (!walletClient) {
+          return;
+        }
 
-        // const tx = await walletClient.writeContract(data.request);
-        // console.log("Transaction Sent");
-        // const transaction = await publicClient.waitForTransactionReceipt({
-        //   hash: tx,
-        // });
-        // console.log(transaction);
-        // console.log(data.result);
-        // return {
-        //   transaction,
-        //   data,
-        // };
+        const tx = await walletClient.writeContract(data.request);
+        console.log("Transaction Sent");
+        const transaction = await publicClient.waitForTransactionReceipt({
+          hash: tx,
+        });
+        console.log(transaction);
+        console.log(data.result);
+        return {
+          transaction,
+          data,
+        };
       } else {
         console.log("Not enough Data. Make Proper selection");
       }
@@ -165,30 +183,21 @@ export default function Contest() {
       if (userData.length !== 8) return console.log("Not enough users");
       if (!userData) return console.log("No user data");
 
-      setRoundOneteamOneMembers([
-        userData[0].displayName,
-        userData[1].displayName,
-      ]);
-      setRoundOneteamTwoMembers([
-        userData[2].displayName,
-        userData[3].displayName,
-      ]);
-      setRoundOneteamThreeMembers([
-        userData[4].displayName,
-        userData[5].displayName,
-      ]);
-      setRoundOneteamFourMembers([
-        userData[6].displayName,
-        userData[7].displayName,
-      ]);
+      setRoundOneteamOneMembers([userData[0], userData[1]]);
+      setRoundOneteamTwoMembers([userData[2], userData[3]]);
+      setRoundOneteamThreeMembers([userData[4], userData[5]]);
+      setRoundOneteamFourMembers([userData[6], userData[7]]);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
 
   const getTournamentsInfo = async () => {
     try {
-      const data = await getTournamentInfo("1");
+      setIsLoading(true);
+      const data = await getTournamentInfo(tournamentId);
       console.log(data);
       setTournamentInfo(data.tournament);
       const tournament = data.tournament;
@@ -198,6 +207,7 @@ export default function Contest() {
       getUsersInfo(compIds, compURIs);
       // await fetch("/api/entries");
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -214,15 +224,122 @@ export default function Contest() {
         fid: fid,
       };
     } catch (error) {
+      setIsLoading(false);
+
+      console.log(error);
+    }
+  };
+
+  const fundGasNeededfortransacton = async () => {
+    try {
+      if (
+        roundOneTeamOneWinner?.fid &&
+        roundOneTeamTwoWinner?.fid &&
+        roundOneTeamThreeWinner?.fid &&
+        roundOneTeamFourWinner?.fid &&
+        roundTwoTeamOneWinner?.fid &&
+        roundTwoTeamTwoWinner?.fid &&
+        finalWinner?.fid
+      ) {
+        const mockEntry = [
+          [
+            BigInt(roundOneTeamOneWinner?.fid),
+            BigInt(roundOneTeamTwoWinner?.fid),
+            BigInt(roundOneTeamThreeWinner?.fid),
+            BigInt(roundOneTeamFourWinner?.fid),
+          ],
+          [
+            BigInt(roundTwoTeamOneWinner?.fid),
+            BigInt(roundTwoTeamTwoWinner?.fid),
+          ],
+          [BigInt(finalWinner?.fid)],
+        ];
+        console.log(mockEntry);
+        if (!publicClient) {
+          return;
+        }
+        const data = await publicClient.simulateContract({
+          account,
+          address: TOURNAMENT_ADDRESS,
+          abi: TOURANMENT_ABI,
+          functionName: "submitEntry",
+          args: [mockEntry],
+        });
+        console.log("Call Valid for User");
+
+        if (!PRIVATE_KEY) {
+          console.log("No Private Key Found");
+          return;
+        }
+        // console.log(PRIVATE_KEY);
+        const accountLocal = privateKeyToAccount(`0x${PRIVATE_KEY}`);
+        // prepare the data
+        const publicClientLocal = createPublicClient({
+          chain: baseSepolia,
+          transport: http("https://sepolia.base.org"),
+        });
+
+        const gasEstimate = await publicClientLocal.estimateContractGas({
+          account: accountLocal,
+          address: TOURNAMENT_ADDRESS,
+          abi: TOURANMENT_ABI,
+          functionName: "submitEntry",
+          args: [mockEntry],
+        });
+        console.log("Gas Estimate", gasEstimate);
+        const { maxFeePerGas, maxPriorityFeePerGas } =
+          await publicClientLocal.estimateFeesPerGas();
+        const { gasPrice } = await publicClientLocal.estimateFeesPerGas({
+          type: "legacy",
+        });
+        console.log(gasPrice);
+
+        if (!walletClient) {
+          return;
+        }
+
+        const walletClientLocal = await createWalletClient({
+          chain: baseSepolia,
+          account: accountLocal,
+          transport: http("https://sepolia.base.org"),
+        });
+        if (!maxFeePerGas || !maxPriorityFeePerGas)
+          return console.log("No Gas Fee Found");
+        console.log(maxFeePerGas, maxPriorityFeePerGas);
+
+        const totalGasValue =
+          maxFeePerGas * gasEstimate + maxPriorityFeePerGas * gasEstimate;
+        console.log("Total Gas", totalGasValue);
+
+        const tx = await walletClientLocal.sendTransaction({
+          to: account,
+          value: totalGasValue * BigInt(3),
+        });
+
+        console.log("Transaction Sent");
+
+        const transaction = await publicClient.waitForTransactionReceipt({
+          hash: tx,
+        });
+        console.log(transaction);
+        console.log(data.result);
+        return {
+          transaction,
+          data,
+        };
+      } else {
+        console.log("Not enough Data. Make Proper selection");
+      }
+    } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!tournamentInfo && !userData) {
+    if (!tournamentInfo && !userData && !isLoading) {
       getTournamentsInfo();
     }
-  }, []);
+  }, [tournamentId]);
 
   return (
     <div className=" z-10 text-white space-y-10">
@@ -239,15 +356,21 @@ export default function Contest() {
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
               {roundOneteamOneMembers &&
                 roundOneteamOneMembers.map((member, index) => (
-                  <div
-                    key={index}
-                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                      roundOneTeamOneWinner === member ? "opacity-50" : ""
-                    }`}
-                    onClick={() => handleRoundOneTeamOneWinner(member)}
-                  >
-                    {member.displayName}
-                  </div>
+                  <HoverCard key={index}>
+                    <HoverCardTrigger
+                      className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                        roundOneTeamOneWinner === member
+                          ? "bg-violet-500 text-white"
+                          : ""
+                      }`}
+                      onClick={() => handleRoundOneTeamOneWinner(member)}
+                    >
+                      {member.displayName}
+                    </HoverCardTrigger>
+                    <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                      {member.entry}
+                    </HoverCardContent>
+                  </HoverCard>
                 ))}
             </div>
           </div>
@@ -256,15 +379,21 @@ export default function Contest() {
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
               {roundOneteamTwoMembers &&
                 roundOneteamTwoMembers.map((member, index) => (
-                  <div
-                    key={index}
-                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                      roundOneTeamTwoWinner === member ? "opacity-50" : ""
-                    }`}
-                    onClick={() => handleRoundOneTeamTwoWinner(member)}
-                  >
-                    {member.displayName}
-                  </div>
+                  <HoverCard key={index}>
+                    <HoverCardTrigger
+                      className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                        roundOneTeamTwoWinner === member
+                          ? "bg-violet-500 text-white"
+                          : ""
+                      }`}
+                      onClick={() => handleRoundOneTeamTwoWinner(member)}
+                    >
+                      {member.displayName}
+                    </HoverCardTrigger>
+                    <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                      {member.entry}
+                    </HoverCardContent>
+                  </HoverCard>
                 ))}
             </div>
           </div>
@@ -273,18 +402,23 @@ export default function Contest() {
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
-            {roundTwoTeamOneMembers[0] &&
-              roundTwoTeamOneMembers[1] &&
+            {roundTwoTeamOneMembers &&
               roundTwoTeamOneMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundTwoTeamOneWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundTwoTeamOneWinner(member)}
-                >
-                  {member?.displayName}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundTwoTeamOneWinner === member
+                        ? "bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundTwoTeamOneWinner(member)}
+                  >
+                    {member?.displayName}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    {member?.entry}
+                  </HoverCardContent>
+                </HoverCard>
               ))}
           </div>
         </div>
@@ -297,41 +431,38 @@ export default function Contest() {
               !finalWinner && "border-x"
             } flex flex-col items-center gap-5  border-white px-4`}
           >
-            {/* {!finalWinner &&
+            {finalists &&
               finalists.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    finalWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleFinalWinner(member)}
-                >
-                  {member}
-                </div>
-              ))} */}
-
-            {finalists[0] &&
-              finalists[1] &&
-              finalists.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    finalWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleFinalWinner(member)}
-                >
-                  {member?.displayName}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      finalWinner === member ? "bg-violet-500 text-white" : ""
+                    }`}
+                    onClick={() => handleFinalWinner(member)}
+                  >
+                    {member?.displayName}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    {member?.entry}
+                  </HoverCardContent>
+                </HoverCard>
               ))}
 
             {finalWinner && (
               <div className=" space-y-4">
-                <div className=" text-2xl text-center font-semibold">
+                <div className=" text-2xl text-center font-semibold mb-4">
                   Winner
                 </div>
-                <div className=" w-40 bg-white rounded-xl  p-3 text-black">
-                  {finalWinner.displayName}
-                </div>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <div className=" w-40 h-12 bg-violet-500 text-white rounded-xl p-3">
+                      {finalWinner.displayName}
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    {finalWinner?.entry}
+                  </HoverCardContent>
+                </HoverCard>
               </div>
             )}
           </div>
@@ -343,18 +474,23 @@ export default function Contest() {
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
-            {roundTwoTeamTwoMembers[0] &&
-              roundTwoTeamTwoMembers[1] &&
+            {roundTwoTeamTwoMembers &&
               roundTwoTeamTwoMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundTwoTeamTwoWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundTwoTeamTwoWinner(member)}
-                >
-                  {member?.displayName}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundTwoTeamTwoWinner === member
+                        ? "bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundTwoTeamTwoWinner(member)}
+                  >
+                    {member?.displayName}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    {member?.entry}
+                  </HoverCardContent>
+                </HoverCard>
               ))}
           </div>
         </div>
@@ -367,15 +503,21 @@ export default function Contest() {
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
               {roundOneteamThreeMembers &&
                 roundOneteamThreeMembers.map((member, index) => (
-                  <div
-                    key={index}
-                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                      roundOneTeamThreeWinner === member ? "opacity-50" : ""
-                    }`}
-                    onClick={() => handleRoundOneTeamThreeWinner(member)}
-                  >
-                    {member.displayName}
-                  </div>
+                  <HoverCard key={index}>
+                    <HoverCardTrigger
+                      className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                        roundOneTeamThreeWinner === member
+                          ? "bg-violet-500 text-white"
+                          : ""
+                      }`}
+                      onClick={() => handleRoundOneTeamThreeWinner(member)}
+                    >
+                      {member.displayName}
+                    </HoverCardTrigger>
+                    <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                      {member.entry}
+                    </HoverCardContent>
+                  </HoverCard>
                 ))}
             </div>
           </div>
@@ -384,22 +526,26 @@ export default function Contest() {
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
               {roundOneteamFourMembers &&
                 roundOneteamFourMembers.map((member, index) => (
-                  <div
-                    key={index}
-                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                      roundOneTeamFourWinner === member ? "opacity-50" : ""
-                    }`}
-                    onClick={() => handleRoundOneTeamFourWinner(member)}
-                  >
-                    {member.displayName}
-                  </div>
+                  <HoverCard key={index}>
+                    <HoverCardTrigger
+                      className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                        roundOneTeamFourWinner === member
+                          ? "bg-violet-500 text-white"
+                          : ""
+                      }`}
+                      onClick={() => handleRoundOneTeamFourWinner(member)}
+                    >
+                      {member.displayName}
+                    </HoverCardTrigger>
+                    <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                      {member.entry}
+                    </HoverCardContent>
+                  </HoverCard>
                 ))}
             </div>
           </div>
         </div>
-        <div>
-          <button onClick={() => submitEntry()}>Submit</button>
-        </div>
+
         {/* left */}
         {/* <div className=" w-[104px] border-t border-white absolute left-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] left-[36.1vw]" />
@@ -408,6 +554,22 @@ export default function Contest() {
         {/* <div className=" w-[104px] border-t border-white absolute right-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] right-[36.1vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[30.2vh] right-[15.6vw]" /> */}
+      </div>
+      <div className=" w-full flex flex-col gap-4 items-center justify-center">
+        <p className=" max-w-lg text-xl font-semibold text-center ">
+          Hover on participants name to view their entry, click on the name to
+          predict round winners and submit below to save your response.
+        </p>
+        <Button variant={"default"} onClick={() => submitEntry()}>
+          Submit Your Prediction
+        </Button>
+
+        <Button
+          variant={"default"}
+          onClick={() => fundGasNeededfortransacton()}
+        >
+          Get Gas Needed for Tx ⛽️
+        </Button>
       </div>
     </div>
   );
