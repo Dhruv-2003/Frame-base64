@@ -6,7 +6,13 @@ import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { TOURANMENT_ABI, TOURNAMENT_ADDRESS } from "../constants/tournament";
 import { getTournamentInfo } from "../utils/graph";
 import { getUserDataForFid } from "frames.js";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { getCompetitorEntries } from "../utils/kv";
+import { Button } from "@/components/ui/button";
 
 export default function Contest() {
   const { address: account } = useAccount();
@@ -156,15 +162,21 @@ export default function Contest() {
             <div className=" text-2xl text-center font-semibold">Round 1</div>
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
               {roundOneteamOneMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamOneWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamOneWinner(member)}
-                >
-                  {member}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamOneWinner === member
+                        ? " bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamOneWinner(member)}
+                  >
+                    {member}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    Hover content here
+                  </HoverCardContent>
+                </HoverCard>
               ))}
             </div>
           </div>
@@ -172,15 +184,21 @@ export default function Contest() {
           <div className=" space-y-4">
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
               {roundOneteamTwoMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamTwoWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamTwoWinner(member)}
-                >
-                  {member}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamTwoWinner === member
+                        ? "bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamTwoWinner(member)}
+                  >
+                    {member}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    Hover content here
+                  </HoverCardContent>
+                </HoverCard>
               ))}
             </div>
           </div>
@@ -190,15 +208,21 @@ export default function Contest() {
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
             {roundTwoTeamOneMembers.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  roundTwoTeamOneWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleRoundTwoTeamOneWinner(member)}
-              >
-                {member}
-              </div>
+              <HoverCard key={index}>
+                <HoverCardTrigger
+                  className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    roundTwoTeamOneWinner === member
+                      ? "bg-violet-500 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handleRoundTwoTeamOneWinner(member)}
+                >
+                  {member}
+                </HoverCardTrigger>
+                <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                  Hover content here
+                </HoverCardContent>
+              </HoverCard>
             ))}
           </div>
         </div>
@@ -211,39 +235,37 @@ export default function Contest() {
               !finalWinner && "border-x"
             } flex flex-col items-center gap-5  border-white px-4`}
           >
-            {/* {!finalWinner &&
-              finalists.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    finalWinner === member ? "opacity-50" : ""
+            {finalists.map((member, index) => (
+              <HoverCard key={index}>
+                <HoverCardTrigger
+                  className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    finalWinner === member ? "bg-violet-500 text-white" : ""
                   }`}
                   onClick={() => handleFinalWinner(member)}
                 >
                   {member}
-                </div>
-              ))} */}
-
-            {finalists.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  finalWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleFinalWinner(member)}
-              >
-                {member}
-              </div>
+                </HoverCardTrigger>
+                <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                  Hover content here
+                </HoverCardContent>
+              </HoverCard>
             ))}
 
             {finalWinner && (
               <div className=" space-y-4">
-                <div className=" text-2xl text-center font-semibold">
+                <div className=" text-2xl text-center font-semibold mb-4">
                   Winner
                 </div>
-                <div className=" w-40 bg-white rounded-xl  p-3 text-black">
-                  {finalWinner}
-                </div>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <div className=" w-40 h-12 bg-violet-500 text-white rounded-xl p-3">
+                      {finalWinner}
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    Hover content here
+                  </HoverCardContent>
+                </HoverCard>
               </div>
             )}
           </div>
@@ -256,15 +278,21 @@ export default function Contest() {
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
             {roundTwoTeamTwoMembers.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  roundTwoTeamTwoWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleRoundTwoTeamTwoWinner(member)}
-              >
-                {member}
-              </div>
+              <HoverCard key={index}>
+                <HoverCardTrigger
+                  className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    roundTwoTeamTwoWinner === member
+                      ? "bg-violet-500 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handleRoundTwoTeamTwoWinner(member)}
+                >
+                  {member}
+                </HoverCardTrigger>
+                <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                  Hover content here
+                </HoverCardContent>
+              </HoverCard>
             ))}
           </div>
         </div>
@@ -276,15 +304,21 @@ export default function Contest() {
             <div className=" text-2xl text-center font-semibold">Round 1</div>
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
               {roundOneteamThreeMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamThreeWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamThreeWinner(member)}
-                >
-                  {member}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamThreeWinner === member
+                        ? "bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamThreeWinner(member)}
+                  >
+                    {member}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    Hover content here
+                  </HoverCardContent>
+                </HoverCard>
               ))}
             </div>
           </div>
@@ -292,22 +326,26 @@ export default function Contest() {
           <div className=" space-y-4">
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
               {roundOneteamFourMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamFourWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamFourWinner(member)}
-                >
-                  {member}
-                </div>
+                <HoverCard key={index}>
+                  <HoverCardTrigger
+                    className={`w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamFourWinner === member
+                        ? "bg-violet-500 text-white"
+                        : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamFourWinner(member)}
+                  >
+                    {member}
+                  </HoverCardTrigger>
+                  <HoverCardContent className=" dark:text-black dark:bg-white py-4">
+                    Hover content here
+                  </HoverCardContent>
+                </HoverCard>
               ))}
             </div>
           </div>
         </div>
-        <div>
-          <button onClick={() => submitEntry()}>Submit</button>
-        </div>
+
         {/* left */}
         {/* <div className=" w-[104px] border-t border-white absolute left-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] left-[36.1vw]" />
@@ -316,6 +354,15 @@ export default function Contest() {
         {/* <div className=" w-[104px] border-t border-white absolute right-[15.6vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[27.5vh] right-[36.1vw]" />
         <div className=" w-[104px] border-t border-white absolute top-[30.2vh] right-[15.6vw]" /> */}
+      </div>
+      <div className=" w-full flex flex-col gap-4 items-center justify-center">
+        <p className=" max-w-lg text-xl font-semibold text-center ">
+          Hover on participants name to view their entry, click on the name to
+          predict round winners and submit below to save your response.
+        </p>
+        <Button variant={"default"} onClick={() => submitEntry()}>
+          Submit Your Prediction
+        </Button>
       </div>
     </div>
   );
