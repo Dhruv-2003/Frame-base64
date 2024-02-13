@@ -8,21 +8,43 @@ import { getTournamentInfo } from "../utils/graph";
 import { getUserDataForFid } from "frames.js";
 import { getCompetitorEntries } from "../utils/kv";
 
+interface userDataType {
+  displayName: string;
+  entry: string;
+  fid: number;
+  profileImage: string;
+  username: string;
+  bio: string;
+}
+
 export default function Contest() {
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+  const [userData, setUserData] = useState<any>();
 
   const [tournamentInfo, setTournamentInfo] = useState<any>();
-  const roundOneteamOneMembers = ["John", "Alice"];
-  const roundOneteamTwoMembers = ["Charlie", "Diana"];
-  const roundOneteamThreeMembers = ["Ram", "Lakshman"];
-  const roundOneteamFourMembers = ["Kushagra", "Dhruv"];
+  // let roundOneteamOneMembers = ["John", "Alice"];
+  // let roundOneteamTwoMembers = ["Charlie", "Diana"];
+  // let roundOneteamThreeMembers = ["Ram", "Lakshman"];
+  // let roundOneteamFourMembers = ["Kushagra", "Dhruv"];
+  const [roundOneteamOneMembers, setRoundOneteamOneMembers] =
+    useState<userDataType[]>();
+  const [roundOneteamTwoMembers, setRoundOneteamTwoMembers] =
+    useState<userDataType[]>();
+  const [roundOneteamThreeMembers, setRoundOneteamThreeMembers] =
+    useState<userDataType[]>();
+  const [roundOneteamFourMembers, setRoundOneteamFourMembers] =
+    useState<userDataType[]>();
 
-  const [roundOneTeamOneWinner, setRoundOneTeamOneWinner] = useState("");
-  const [roundOneTeamTwoWinner, setRoundOneTeamTwoWinner] = useState("");
-  const [roundOneTeamThreeWinner, setRoundOneTeamThreeWinner] = useState("");
-  const [roundOneTeamFourWinner, setRoundOneTeamFourWinner] = useState("");
+  const [roundOneTeamOneWinner, setRoundOneTeamOneWinner] =
+    useState<userDataType>();
+  const [roundOneTeamTwoWinner, setRoundOneTeamTwoWinner] =
+    useState<userDataType>();
+  const [roundOneTeamThreeWinner, setRoundOneTeamThreeWinner] =
+    useState<userDataType>();
+  const [roundOneTeamFourWinner, setRoundOneTeamFourWinner] =
+    useState<userDataType>();
 
   const roundTwoTeamOneMembers = [roundOneTeamOneWinner, roundOneTeamTwoWinner];
   const roundTwoTeamTwoMembers = [
@@ -30,115 +52,174 @@ export default function Contest() {
     roundOneTeamFourWinner,
   ];
 
-  const [roundTwoTeamOneWinner, setRoundTwoTeamOneWinner] = useState("");
-  const [roundTwoTeamTwoWinner, setRoundTwoTeamTwoWinner] = useState("");
+  const [roundTwoTeamOneWinner, setRoundTwoTeamOneWinner] =
+    useState<userDataType>();
+  const [roundTwoTeamTwoWinner, setRoundTwoTeamTwoWinner] =
+    useState<userDataType>();
 
-  const [finalWinner, setFinalWinner] = useState("");
+  const [finalWinner, setFinalWinner] = useState<userDataType>();
 
   const finalists = [roundTwoTeamOneWinner, roundTwoTeamTwoWinner];
 
   //   round one handle functions
-  const handleRoundOneTeamOneWinner = (winner: string) => {
+  const handleRoundOneTeamOneWinner = (winner: userDataType) => {
     setRoundOneTeamOneWinner(winner);
   };
 
-  const handleRoundOneTeamTwoWinner = (winner: string) => {
+  const handleRoundOneTeamTwoWinner = (winner: userDataType) => {
     setRoundOneTeamTwoWinner(winner);
   };
 
-  const handleRoundOneTeamThreeWinner = (winner: string) => {
+  const handleRoundOneTeamThreeWinner = (winner: userDataType) => {
     setRoundOneTeamThreeWinner(winner);
   };
 
-  const handleRoundOneTeamFourWinner = (winner: string) => {
+  const handleRoundOneTeamFourWinner = (winner: userDataType) => {
     setRoundOneTeamFourWinner(winner);
   };
 
   //   round two handle functions
-  const handleRoundTwoTeamOneWinner = (winner: string) => {
+  const handleRoundTwoTeamOneWinner = (winner: userDataType) => {
     setRoundTwoTeamOneWinner(winner);
   };
 
-  const handleRoundTwoTeamTwoWinner = (winner: string) => {
+  const handleRoundTwoTeamTwoWinner = (winner: userDataType) => {
     setRoundTwoTeamTwoWinner(winner);
   };
 
-  const handleFinalWinner = (winner: string) => {
+  const handleFinalWinner = (winner: userDataType) => {
     setFinalWinner(winner);
   };
 
   const submitEntry = async () => {
     try {
       let entry: bigint[][] = [];
-      const mockEntry = [
-        [
-          roundOneTeamOneWinner,
-          roundOneTeamTwoWinner,
-          roundOneTeamThreeWinner,
-          roundOneTeamFourWinner,
-        ],
-        [roundTwoTeamOneWinner, roundTwoTeamTwoWinner],
-        [finalWinner],
-      ];
-      // prepare the data
-      if (!publicClient) {
-        return;
-      }
-      const data = await publicClient.simulateContract({
-        account,
-        address: TOURNAMENT_ADDRESS,
-        abi: TOURANMENT_ABI,
-        functionName: "submitEntry",
-        args: [entry],
-      });
+      if (
+        roundOneTeamOneWinner?.fid &&
+        roundOneTeamTwoWinner?.fid &&
+        roundOneTeamThreeWinner?.fid &&
+        roundOneTeamFourWinner?.fid &&
+        roundTwoTeamOneWinner?.fid &&
+        roundTwoTeamTwoWinner?.fid &&
+        finalWinner?.fid
+      ) {
+        const mockEntry = [
+          [
+            roundOneTeamOneWinner?.fid,
+            roundOneTeamTwoWinner?.fid,
+            roundOneTeamThreeWinner?.fid,
+            roundOneTeamFourWinner?.fid,
+          ],
+          [roundTwoTeamOneWinner?.fid, roundTwoTeamTwoWinner?.fid],
+          [BigInt(finalWinner?.fid)],
+        ];
+        console.log(mockEntry);
+        // // prepare the data
+        // if (!publicClient) {
+        //   return;
+        // }
+        // const data = await publicClient.simulateContract({
+        //   account,
+        //   address: TOURNAMENT_ADDRESS,
+        //   abi: TOURANMENT_ABI,
+        //   functionName: "submitEntry",
+        //   args: [entry],
+        // });
 
-      if (!walletClient) {
-        return;
-      }
+        // if (!walletClient) {
+        //   return;
+        // }
 
-      const tx = await walletClient.writeContract(data.request);
-      console.log("Transaction Sent");
-      const transaction = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
-      console.log(transaction);
-      console.log(data.result);
-      return {
-        transaction,
-        data,
-      };
+        // const tx = await walletClient.writeContract(data.request);
+        // console.log("Transaction Sent");
+        // const transaction = await publicClient.waitForTransactionReceipt({
+        //   hash: tx,
+        // });
+        // console.log(transaction);
+        // console.log(data.result);
+        // return {
+        //   transaction,
+        //   data,
+        // };
+      } else {
+        console.log("Not enough Data. Make Proper selection");
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getUsersInfo = async () => {};
+  const getUsersInfo = async (compIds: bigint[], compURIs: string[]) => {
+    try {
+      // fetch the user's other data
+
+      let promises: any[] = [];
+
+      compIds.forEach((fid, i) => {
+        promises.push(getUserFarcasterInfo(Number(fid), compURIs[i]));
+      });
+
+      let userData = await Promise.all(promises);
+      console.log(userData);
+      setUserData(userData);
+      if (userData.length !== 8) return console.log("Not enough users");
+      if (!userData) return console.log("No user data");
+
+      setRoundOneteamOneMembers([
+        userData[0].displayName,
+        userData[1].displayName,
+      ]);
+      setRoundOneteamTwoMembers([
+        userData[2].displayName,
+        userData[3].displayName,
+      ]);
+      setRoundOneteamThreeMembers([
+        userData[4].displayName,
+        userData[5].displayName,
+      ]);
+      setRoundOneteamFourMembers([
+        userData[6].displayName,
+        userData[7].displayName,
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getTournamentsInfo = async () => {
     try {
       const data = await getTournamentInfo("1");
       console.log(data);
-      setTournamentInfo(data.tournamet);
+      setTournamentInfo(data.tournament);
+      const tournament = data.tournament;
+      const compIds = tournament.compIDs;
+      const compURIs = tournament.compURIs;
+
+      getUsersInfo(compIds, compURIs);
       // await fetch("/api/entries");
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getUserFarcasterInfo = async (fid: number) => {
+  const getUserFarcasterInfo = async (fid: number, compURI: string) => {
     try {
       // Optional to use Airstack , or Neynar API if needed
       const userData = await getUserDataForFid({ fid });
 
       console.log(userData);
-      return userData;
+      return {
+        ...userData,
+        entry: compURI,
+        fid: fid,
+      };
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!tournamentInfo) {
+    if (!tournamentInfo && !userData) {
       getTournamentsInfo();
     }
   }, []);
@@ -156,33 +237,35 @@ export default function Contest() {
           <div className=" space-y-4 ">
             <div className=" text-2xl text-center font-semibold">Round 1</div>
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
-              {roundOneteamOneMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamOneWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamOneWinner(member)}
-                >
-                  {member}
-                </div>
-              ))}
+              {roundOneteamOneMembers &&
+                roundOneteamOneMembers.map((member, index) => (
+                  <div
+                    key={index}
+                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamOneWinner === member ? "opacity-50" : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamOneWinner(member)}
+                  >
+                    {member.displayName}
+                  </div>
+                ))}
             </div>
           </div>
           {/* team 2 */}
           <div className=" space-y-4">
             <div className=" flex flex-col items-center gap-5 border-r border-white pr-4">
-              {roundOneteamTwoMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamTwoWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamTwoWinner(member)}
-                >
-                  {member}
-                </div>
-              ))}
+              {roundOneteamTwoMembers &&
+                roundOneteamTwoMembers.map((member, index) => (
+                  <div
+                    key={index}
+                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamTwoWinner === member ? "opacity-50" : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamTwoWinner(member)}
+                  >
+                    {member.displayName}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -190,17 +273,19 @@ export default function Contest() {
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
-            {roundTwoTeamOneMembers.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  roundTwoTeamOneWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleRoundTwoTeamOneWinner(member)}
-              >
-                {member}
-              </div>
-            ))}
+            {roundTwoTeamOneMembers[0] &&
+              roundTwoTeamOneMembers[1] &&
+              roundTwoTeamOneMembers.map((member, index) => (
+                <div
+                  key={index}
+                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    roundTwoTeamOneWinner === member ? "opacity-50" : ""
+                  }`}
+                  onClick={() => handleRoundTwoTeamOneWinner(member)}
+                >
+                  {member?.displayName}
+                </div>
+              ))}
           </div>
         </div>
         {/* final winner */}
@@ -225,17 +310,19 @@ export default function Contest() {
                 </div>
               ))} */}
 
-            {finalists.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  finalWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleFinalWinner(member)}
-              >
-                {member}
-              </div>
-            ))}
+            {finalists[0] &&
+              finalists[1] &&
+              finalists.map((member, index) => (
+                <div
+                  key={index}
+                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    finalWinner === member ? "opacity-50" : ""
+                  }`}
+                  onClick={() => handleFinalWinner(member)}
+                >
+                  {member?.displayName}
+                </div>
+              ))}
 
             {finalWinner && (
               <div className=" space-y-4">
@@ -243,7 +330,7 @@ export default function Contest() {
                   Winner
                 </div>
                 <div className=" w-40 bg-white rounded-xl  p-3 text-black">
-                  {finalWinner}
+                  {finalWinner.displayName}
                 </div>
               </div>
             )}
@@ -256,17 +343,19 @@ export default function Contest() {
         <div className=" space-y-4">
           <div className=" text-2xl text-center font-semibold">Round 2</div>
           <div className=" flex flex-col items-center gap-5 border-x border-white px-4">
-            {roundTwoTeamTwoMembers.map((member, index) => (
-              <div
-                key={index}
-                className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                  roundTwoTeamTwoWinner === member ? "opacity-50" : ""
-                }`}
-                onClick={() => handleRoundTwoTeamTwoWinner(member)}
-              >
-                {member}
-              </div>
-            ))}
+            {roundTwoTeamTwoMembers[0] &&
+              roundTwoTeamTwoMembers[1] &&
+              roundTwoTeamTwoMembers.map((member, index) => (
+                <div
+                  key={index}
+                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                    roundTwoTeamTwoWinner === member ? "opacity-50" : ""
+                  }`}
+                  onClick={() => handleRoundTwoTeamTwoWinner(member)}
+                >
+                  {member?.displayName}
+                </div>
+              ))}
           </div>
         </div>
 
@@ -276,33 +365,35 @@ export default function Contest() {
           <div className=" space-y-4">
             <div className=" text-2xl text-center font-semibold">Round 1</div>
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
-              {roundOneteamThreeMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamThreeWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamThreeWinner(member)}
-                >
-                  {member}
-                </div>
-              ))}
+              {roundOneteamThreeMembers &&
+                roundOneteamThreeMembers.map((member, index) => (
+                  <div
+                    key={index}
+                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamThreeWinner === member ? "opacity-50" : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamThreeWinner(member)}
+                  >
+                    {member.displayName}
+                  </div>
+                ))}
             </div>
           </div>
           {/* right round 1 team 2 */}
           <div className=" space-y-4">
             <div className=" flex flex-col items-center gap-5 border-l border-white pl-4">
-              {roundOneteamFourMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
-                    roundOneTeamFourWinner === member ? "opacity-50" : ""
-                  }`}
-                  onClick={() => handleRoundOneTeamFourWinner(member)}
-                >
-                  {member}
-                </div>
-              ))}
+              {roundOneteamFourMembers &&
+                roundOneteamFourMembers.map((member, index) => (
+                  <div
+                    key={index}
+                    className={`w-40 bg-white rounded-xl p-3 text-black cursor-pointer ${
+                      roundOneTeamFourWinner === member ? "opacity-50" : ""
+                    }`}
+                    onClick={() => handleRoundOneTeamFourWinner(member)}
+                  >
+                    {member.displayName}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
