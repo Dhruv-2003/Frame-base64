@@ -119,6 +119,7 @@ export default function Contest() {
       const data = await getTournamentInfo("2");
       console.log(data);
       setTournamentInfo(data.tournamet);
+      await fetch("/api/entries");
     } catch (error) {
       console.log(error);
     }

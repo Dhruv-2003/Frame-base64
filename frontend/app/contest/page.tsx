@@ -7,7 +7,7 @@ import Contest from "../../components/contest";
 
 // Declare the frame
 const initialFrame: Frame = {
-  image: `${process.env.NEXT_PUBLIC_HOST}/contest.png`,
+  image: `${process.env.NEXT_PUBLIC_HOST}/VotingStarts.png`,
   version: "vNext",
   buttons: [
     {

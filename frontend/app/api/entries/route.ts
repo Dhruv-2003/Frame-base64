@@ -123,6 +123,12 @@ export async function POST(request: NextRequest) {
       version: "vNext",
       image: `${imageUrlBase}/InvalidEntry.png`,
       ogImage: `${imageUrlBase}/InvalidEntry.png`,
+      buttons: [
+        {
+          label: `Back`,
+          action: "post",
+        },
+      ],
       postUrl: `${process.env.NEXT_PUBLIC_HOST}`,
     };
 
