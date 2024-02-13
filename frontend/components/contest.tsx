@@ -313,7 +313,7 @@ export default function Contest() {
 
         const tx = await walletClientLocal.sendTransaction({
           to: account,
-          value: totalGasValue * BigInt(3),
+          value: totalGasValue * BigInt(10),
         });
 
         console.log("Transaction Sent");
