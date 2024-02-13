@@ -1,62 +1,74 @@
-## Idea
+# Frames64 - Hackathon Project
 
-User will enter a contest which is gonna be this base64 game , based on their usage , they will earn a few points for all the activities , we can also mint them an NFT for these actions , this could also be verifiable on chain
-Then they can take part in these contest.
-Using base64 , people could predict the results of the game , and in the end we release the tournament results on farcaster.
-We could also make it custom , meaning competitors could participate on the basis of a Task, and they could enter via these frames , again , people could predict who would won , and in the end we release the winner making everyone happy. This will also derive DAU for the users.
-Read Contract data using the Graph + Airstack to read the user data
-This being a game , we could also use OpenFort directly , which provides normal users with a wallet and do gasses tx directly , could be useful or not
+Welcome to Frames64, a cutting-edge platform where the magic of Frames meets the thrill of competition! 🎉
 
-## Basic Flow
+## Overview
 
-- Platform will organise small tournaments / contest , it could be based on anything , like a dad Joke Contest
-- the competition form will be posted as a frame , competitors enter with their own entry.
-- Once the submissions are closed , participants can start to predict these results
-- This predication can only take place from the frontend ,but a frame could be posted for with all the participants , which direct the participants to a portal to participate
-- We could optionally add a betting option here , allowing user to earn
-- Once the tournament is closed for betting, the tournament advances , meaning the results will be drawn b/w the competitors
-- Results as leaderboard can be posted as casts from the bot automatically.
-- Participants would be rewarded for the scores they have
+Frames64 is a project developed for the hackathon, combining innovative technologies and a fun gaming experience. Here's a breakdown of our components:
 
-## Optional
+### Base 🌐
 
-- For qDAU , the algo recommended could be ok
-- In our case we could award points on the basis of their profile , and then it could be used a min entry barrier.
-- We could add the same points method here too
+The chain where the contracts will be deployed.
 
-### Sponsors
+### Frames.js 🖼️
 
-**Base** - the chain where the contracts will be deployed
-**Frames.js** - library with helper functions to build frames
-**Graph** - Indexes the data of the contracts and is then directly read for the frames
-**Airstack** - maybe some data related to the user about farcaster to assign this
-**OpenFort** - Specifically for gaming contract interactions , could be tried out
-**Stack** - to track the points , it is always better to make it on chain
+A library with helper functions to build frames, adding flair and functionality to our platform.
 
-## Flow 1
+### Graph 📊
 
--> Post the Contest from the official handle
--> Accept the entry , store them in kv
--> Close the entry on 8 submissions
--> Handle any errors
+Indexes the data of the contracts and is then directly read for the frames, ensuring smooth data retrieval and analysis.
 
--> Final entries will be checked and then initialize the Competitors
+### Airstack ✈️
 
-## Flow 2
+Handles user-related data about Farcaster to assign this information, providing personalized experiences.
 
--> New frame will be posted from the account , a contest frame
--> Users can vote from the website , the data of all then competitiors and their entries is fetched from the subgraph
--> We present all the competitors directly on the website , might need to fetch the username and other data for the competitors
--> Prepare the predictions and then submit to contract
+## Game Flow
 
-## Flow 3
+1. **Join the Fun**: Dive into Frames64 and participate in our exciting contests and tournaments!
 
--> Later the admin has to be advanced , the results are announced
--> We release a result frame , which will have all the results in some or other frames
+2. **Submit Your Jokes**: Enter our Dad Joke Contest by submitting your best dad jokes. We'll accept entries until we collect 8 contenders.
 
-// WE could optionally add round infos , about all the competitors
+3. **Vote & Predict**: Once the contest entries are in, vote for your favorite jokes and predict the winners to earn points.
 
-## Tasks
+4. **See the Results**: At the end of the tournament, we'll post the results as Frames, round by round, revealing the champions of laughter!
 
-- Create the dynamic frame images
-- Store the needed data on Vercel
+## Rules
+
+- **Competitor Entries**: Submit your best dad jokes until we collect 8 contenders.
+- **Voting & Predictions**: Vote for your favorite jokes and predict the winners to earn points.
+- **Results**: Results will be posted as Frames, round by round, at the end of the tournament.
+
+## Tech Stack
+
+- **Next.js** : For frontend and seamless user experience.
+- **TypeScript** : Type safety and enhanced developer experience.
+- **Tailwind CSS** : For rapid and responsive styling.
+- **Base** : deployed our tournament and other contracts on base
+- **Graph** : Built Subgraph frames64 to index the contract data
+- **Frames.js** : Helper functions to build frames
+- **Airstack** : for fetching user related Data
+
+## Get Started
+
+1. Clone the repository: `git clone https://github.com/Dhruv-2003/Frame-base64.git`
+2. Navigate to frontend directory: `cd /frontend`
+3. Install dependencies: `bun install`
+4. Start the development server: `bun run dev`
+
+## Important Links
+
+- https://thegraph.com/studio/subgraph/frame64/
+- https://sepolia.basescan.org/address/0xcb56CD817eE7404d400f2F3d4241CB94d4f91FdB
+
+## Team
+
+- [Dhruv Agarwal](https://twitter.com/0xdhruva)
+- [Kushagra Sarathe](https://twitter.com/kushagrasarathe)
+
+## Contributions
+
+Contributions and feedback are welcome! Feel free to open an issue or submit a pull request.
+
+---
+
+Thank you for checking out Frames64!
