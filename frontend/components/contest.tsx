@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/hover-card";
 import { getCompetitorEntries } from "../utils/kv";
 import { Button } from "@/components/ui/button";
-import { createPublicClient, createWalletClient, http } from "viem";
+import { createPublicClient, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 
@@ -296,12 +296,13 @@ export default function Contest() {
           args: [mockEntry],
         });
         console.log("Gas Estimate", gasEstimate);
-        const { maxFeePerGas, maxPriorityFeePerGas } =
-          await publicClientLocal.estimateFeesPerGas();
-        const { gasPrice } = await publicClientLocal.estimateFeesPerGas({
-          type: "legacy",
-        });
-        console.log(gasPrice);
+        // const { maxFeePerGas, maxPriorityFeePerGas } =
+        //   await publicClientLocal.estimateFeesPerGas();
+        // // const { gasPrice } = await publicClientLocal.estimateFeesPerGas({
+        // //   type: "legacy",
+        // // });
+        // const gasPrice = await publicClientLocal.getGasPrice();
+        // console.log(gasPrice);
 
         if (!walletClient) {
           return;
@@ -312,17 +313,21 @@ export default function Contest() {
           account: accountLocal,
           transport: http("https://sepolia.base.org"),
         });
-        if (!maxFeePerGas || !maxPriorityFeePerGas)
-          return console.log("No Gas Fee Found");
-        console.log(maxFeePerGas, maxPriorityFeePerGas);
+        // if (!maxFeePerGas || !maxPriorityFeePerGas)
+        //   return console.log("No Gas Fee Found");
+        // console.log(maxFeePerGas, maxPriorityFeePerGas);
 
-        const totalGasValue =
-          maxFeePerGas * gasEstimate + maxPriorityFeePerGas * gasEstimate;
-        console.log("Total Gas", totalGasValue);
+        // const totalGasValueMax =
+        //   maxFeePerGas * gasEstimate + maxPriorityFeePerGas * gasEstimate;
+        // console.log("Total Gas max", totalGasValueMax);
+        // const totalGas = gasPrice * gasEstimate;
+        // console.log("Total gas", totalGas);
+
+        const gasValue = parseEther("0.001");
 
         const tx = await walletClientLocal.sendTransaction({
           to: account,
-          value: totalGasValue * BigInt(10),
+          value: gasValue,
         });
 
         console.log("Transaction Sent");
