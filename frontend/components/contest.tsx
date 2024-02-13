@@ -35,7 +35,7 @@ import Loader, { SmallLoader } from "./loader";
 import { cn } from "@/lib/utils";
 
 export default function Contest() {
-  const { address: account } = useAccount();
+  const { address: account, isConnected } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
   const [userData, setUserData] = useState<any>();
@@ -114,7 +114,14 @@ export default function Contest() {
 
   const submitEntry = async () => {
     try {
+      setIsLoading(true);
       let entry: bigint[][] = [];
+      if (!isConnected) {
+        setIsLoading(false);
+        console.log("No Wallet Detected");
+        toast.error("No Wallet Detected");
+        return;
+      }
       if (
         roundOneTeamOneWinner?.fid &&
         roundOneTeamTwoWinner?.fid &&
@@ -140,6 +147,9 @@ export default function Contest() {
         console.log(mockEntry);
         // prepare the data
         if (!publicClient) {
+          setIsLoading(false);
+          console.log("No Wallet Detected");
+          toast.error("No Wallet Detected");
           return;
         }
         const data = await publicClient.simulateContract({
@@ -151,6 +161,9 @@ export default function Contest() {
         });
 
         if (!walletClient) {
+          setIsLoading(false);
+          console.log("No Wallet Detected");
+          toast.error("Please Connect your Wallet");
           return;
         }
 
@@ -162,24 +175,29 @@ export default function Contest() {
         });
         console.log(transaction);
         console.log(data.result);
+        setIsLoading(false);
         return {
           transaction,
           data,
         };
       } else {
+        setIsLoading(false);
         console.log("Not enough Data. Make Proper selection");
         toast.error("Please select entries for all rounds");
       }
     } catch (error) {
+      setIsLoading(false);
+      // const errorMessage = error.message.slice(0, 25) as string;
+      // toast.error(`${errorMessage}`);
       // @ts-ignore
-      const errorMessage = error.message.slice(0, 25) as string;
-      toast.error(`${errorMessage}`);
-      console.log("user rejected =====>>>>", errorMessage);
+      toast.error(`${error.message}`);
+      console.log("user rejected =====>>>>", error);
     }
   };
 
   const getUsersInfo = async (compIds: bigint[], compURIs: string[]) => {
     try {
+      setIsLoading(true);
       // fetch the user's other data
 
       let promises: any[] = [];
@@ -201,6 +219,7 @@ export default function Contest() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
+      toast.error("Error fetching user data");
       console.log(error);
     }
   };
@@ -219,6 +238,7 @@ export default function Contest() {
       // await fetch("/api/entries");
     } catch (error) {
       setIsLoading(false);
+      toast.error("Error fetching user Tournaments data");
       console.log(error);
     }
   };
@@ -237,13 +257,20 @@ export default function Contest() {
       };
     } catch (error) {
       setIsLoading(false);
-
+      toast.error("Error fetching user  Farcaster data");
       console.log(error);
     }
   };
 
   const fundGasNeededfortransacton = async () => {
     try {
+      setIsLoading(true);
+      if (!isConnected) {
+        setIsLoading(false);
+        console.log("No Wallet Detected");
+        toast.error("No Wallet Detected");
+        return;
+      }
       if (
         roundOneTeamOneWinner?.fid &&
         roundOneTeamTwoWinner?.fid &&
@@ -268,6 +295,9 @@ export default function Contest() {
         ];
         console.log(mockEntry);
         if (!publicClient) {
+          setIsLoading(false);
+          console.log("No Wallet Detected");
+          toast.error("No Wallet Detected");
           return;
         }
         const data = await publicClient.simulateContract({
@@ -306,8 +336,12 @@ export default function Contest() {
         // // });
         // const gasPrice = await publicClientLocal.getGasPrice();
         // console.log(gasPrice);
+        setIsLoading(false);
 
         if (!walletClient) {
+          setIsLoading(false);
+          console.log("No Wallet Detected");
+          toast.error("Please Connect your Wallet");
           return;
         }
 
@@ -341,15 +375,22 @@ export default function Contest() {
         });
         console.log(transaction);
         console.log(data.result);
+        setIsLoading(false);
+
         return {
           transaction,
           data,
         };
       } else {
+        setIsLoading(false);
         console.log("Not enough Data. Make Proper selection");
         toast.error("Please select entries for all rounds");
       }
     } catch (error) {
+      setIsLoading(false);
+      // @ts-ignore
+      // const errorMessage = error.message.slice(0, 25) as string;
+      toast.error(`${error.message}`);
       console.log(error);
     }
   };
