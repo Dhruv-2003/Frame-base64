@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/hover-card";
 import { getCompetitorEntries } from "../utils/kv";
 import { Button } from "@/components/ui/button";
-import clsx from "clsx";
 import Loader from "./loader";
+import { cn } from "@/lib/utils";
 
 export default function Contest() {
   const { address: account } = useAccount();
@@ -171,11 +171,11 @@ export default function Contest() {
               {roundOneteamOneMembers.map((member, index) => (
                 <HoverCard key={index}>
                   <HoverCardTrigger
-                    className={clsx(
+                    className={cn(
                       roundOneTeamOneWinner === member
                         ? " bg-[#a889fe] text-white"
-                        : "",
-                      `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer`
+                        : " bg-white text-black",
+                      `w-40 h-12 rounded-xl p-3 cursor-pointer`
                     )}
                     onClick={() => handleRoundOneTeamOneWinner(member)}
                   >
@@ -194,11 +194,11 @@ export default function Contest() {
               {roundOneteamTwoMembers.map((member, index) => (
                 <HoverCard key={index}>
                   <HoverCardTrigger
-                    className={clsx(
+                    className={cn(
                       roundOneTeamTwoWinner === member
                         ? "bg-[#a889fe] text-white"
-                        : "",
-                      `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer`
+                        : " bg-white text-black",
+                      `w-40 h-12 rounded-xl p-3 cursor-pointer`
                     )}
                     onClick={() => handleRoundOneTeamTwoWinner(member)}
                   >
@@ -219,11 +219,11 @@ export default function Contest() {
             {roundTwoTeamOneMembers.map((member, index) => (
               <HoverCard key={index}>
                 <HoverCardTrigger
-                  className={clsx(
+                  className={cn(
                     roundTwoTeamOneWinner === member
                       ? "bg-[#a889fe] text-white"
-                      : "",
-                    `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer
+                      : "bg-white text-black",
+                    `w-40 h-12 rounded-xl p-3 cursor-pointer
                   `
                   )}
                   onClick={() => handleRoundTwoTeamOneWinner(member)}
@@ -249,9 +249,11 @@ export default function Contest() {
             {finalists.map((member, index) => (
               <HoverCard key={index}>
                 <HoverCardTrigger
-                  className={clsx(
-                    finalWinner === member ? "bg-[#a889fe] text-white" : "",
-                    `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer 
+                  className={cn(
+                    finalWinner === member
+                      ? "bg-[#a889fe] text-white"
+                      : "bg-white text-black",
+                    `w-40 h-12 rounded-xl p-3 cursor-pointer 
                     `
                   )}
                   onClick={() => handleFinalWinner(member)}
@@ -293,11 +295,11 @@ export default function Contest() {
             {roundTwoTeamTwoMembers.map((member, index) => (
               <HoverCard key={index}>
                 <HoverCardTrigger
-                  className={clsx(
+                  className={cn(
                     roundTwoTeamTwoWinner === member
                       ? "bg-[#a889fe] text-white"
-                      : "",
-                    `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer
+                      : "bg-white text-black",
+                    `w-40 h-12 rounded-xl p-3 cursor-pointer
                     `
                   )}
                   onClick={() => handleRoundTwoTeamTwoWinner(member)}
@@ -321,11 +323,11 @@ export default function Contest() {
               {roundOneteamThreeMembers.map((member, index) => (
                 <HoverCard key={index}>
                   <HoverCardTrigger
-                    className={clsx(
+                    className={cn(
                       roundOneTeamThreeWinner === member
                         ? "bg-[#a889fe] text-white"
-                        : "",
-                      `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer
+                        : "bg-white text-black",
+                      `w-40 h-12 rounded-xl p-3 cursor-pointer
                       `
                     )}
                     onClick={() => handleRoundOneTeamThreeWinner(member)}
@@ -345,11 +347,11 @@ export default function Contest() {
               {roundOneteamFourMembers.map((member, index) => (
                 <HoverCard key={index}>
                   <HoverCardTrigger
-                    className={clsx(
+                    className={cn(
                       roundOneTeamFourWinner === member
                         ? "bg-[#a889fe] text-white"
-                        : "",
-                      `w-40 h-12 bg-white rounded-xl p-3 text-black cursor-pointer 
+                        : "bg-white text-black",
+                      `w-40 h-12 rounded-xl p-3 cursor-pointer 
                       `
                     )}
                     onClick={() => handleRoundOneTeamFourWinner(member)}
