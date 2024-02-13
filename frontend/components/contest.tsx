@@ -30,7 +30,7 @@ interface userDataType {
 const tournamentId = "1";
 
 const PRIVATE_KEY = process.env.NEXT_PUBLIC_PRIVATE_KEY;
-import Loader from "./loader";
+import Loader, { SmallLoader } from "./loader";
 import { cn } from "@/lib/utils";
 
 export default function Contest() {
@@ -153,6 +153,7 @@ export default function Contest() {
 
         const tx = await walletClient.writeContract(data.request);
         console.log("Transaction Sent");
+        toast.success("Transaction intiated successfully");
         const transaction = await publicClient.waitForTransactionReceipt({
           hash: tx,
         });
@@ -164,10 +165,13 @@ export default function Contest() {
         };
       } else {
         console.log("Not enough Data. Make Proper selection");
+        toast.error("Please select entries for all rounds");
       }
     } catch (error) {
-      console.log(error);
-      toast("");
+      // @ts-ignore
+      const errorMessage = error.message.slice(0, 25) as string;
+      toast.error(`${errorMessage}`);
+      console.log("user rejected =====>>>>", errorMessage);
     }
   };
 
@@ -218,6 +222,7 @@ export default function Contest() {
 
   const getUserFarcasterInfo = async (fid: number, compURI: string) => {
     try {
+      setIsLoading(true);
       // Optional to use Airstack , or Neynar API if needed
       const userData = await getUserDataForFid({ fid });
 
@@ -321,6 +326,7 @@ export default function Contest() {
         });
 
         console.log("Transaction Sent");
+        toast.success("Transaction initated successfully");
 
         const transaction = await publicClient.waitForTransactionReceipt({
           hash: tx,
@@ -333,6 +339,7 @@ export default function Contest() {
         };
       } else {
         console.log("Not enough Data. Make Proper selection");
+        toast.error("Please select entries for all rounds");
       }
     } catch (error) {
       console.log(error);
@@ -345,9 +352,16 @@ export default function Contest() {
     }
   }, [tournamentId]);
 
+  if (isLoading && !userData && !tournamentInfo) {
+    return (
+      <div className="z-10 text-white">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div className=" z-10 text-white space-y-10">
-      {/* <Loader /> */}
       <div className=" flex items-center justify-between w-full md:max-w-7xl mx-auto">
         <h1 className=" text-6xl font-semibold text-center">Frames 64 </h1>
         <ConnectButton />
@@ -420,6 +434,7 @@ export default function Contest() {
                       `w-40 h-12 rounded-xl p-3 cursor-pointer
                   `
                     )}
+                    // @ts-ignore
                     onClick={() => handleRoundTwoTeamOneWinner(member)}
                   >
                     {member?.displayName}
@@ -451,6 +466,7 @@ export default function Contest() {
                       `w-40 h-12 rounded-xl p-3 cursor-pointer 
                     `
                     )}
+                    // @ts-ignore
                     onClick={() => handleFinalWinner(member)}
                   >
                     {member?.displayName}
@@ -498,6 +514,7 @@ export default function Contest() {
                       `w-40 h-12 rounded-xl p-3 cursor-pointer
                     `
                     )}
+                    // @ts-ignore
                     onClick={() => handleRoundTwoTeamTwoWinner(member)}
                   >
                     {member?.displayName}
@@ -579,16 +596,17 @@ export default function Contest() {
           Hover on participants name to view their entry, click on the name to
           predict round winners and submit below to save your response.
         </p>
-        <Button variant={"default"} onClick={submitEntry}>
-          Submit Your Prediction
-        </Button>
-
-        <Button
-          variant={"default"}
-          onClick={() => fundGasNeededfortransacton()}
-        >
-          Get Gas Needed for Tx ⛽️
-        </Button>
+        <div className=" flex items-center gap-4">
+          <Button
+            variant={"default"}
+            onClick={() => fundGasNeededfortransacton()}
+          >
+            {isLoading ? <SmallLoader /> : "Get Gas Needed for Tx ⛽️"}
+          </Button>
+          <Button variant={"default"} onClick={submitEntry}>
+            {isLoading ? <SmallLoader /> : "Submit Your Prediction"}
+          </Button>
+        </div>
       </div>
     </div>
   );

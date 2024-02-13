@@ -8,3 +8,7 @@ export default function Loader() {
     </div>
   );
 }
+
+export const SmallLoader = () => {
+  return <LoaderIcon className="animate-spin" />;
+};
