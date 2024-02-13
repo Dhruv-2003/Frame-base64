@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { createPublicClient, createWalletClient, http, parseEther } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
+import { useMediaQuery } from "@react-hook/media-query";
 
 interface userDataType {
   displayName: string;
@@ -108,6 +109,8 @@ export default function Contest() {
   const handleFinalWinner = (winner: userDataType) => {
     setFinalWinner(winner);
   };
+
+  const isMobile = useMediaQuery("(max-width: 900px)");
 
   const submitEntry = async () => {
     try {
@@ -361,6 +364,18 @@ export default function Contest() {
     return (
       <div className="z-10 text-white">
         <Loader />
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className=" flex items-center justify-center min-h-screen z-20 text-center">
+        <div className=" text-white px-6">
+          Uh-oh! Our mobile view seems to have gone rogue! 🤖 <br /> {`We're`}{" "}
+          giving it a stern talking-to and will have it back in line ASAP.
+          Thanks for your patience!
+        </div>
       </div>
     );
   }
