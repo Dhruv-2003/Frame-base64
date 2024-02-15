@@ -8,12 +8,28 @@ import Contest from "../../components/contest";
 
 // Declare the frame
 const initialFrame: Frame = {
-  image: `${process.env.NEXT_PUBLIC_HOST}/result.png`,
+  image: `${process.env.NEXT_PUBLIC_HOST}/api/images/results/winner`,
   version: "vNext",
   buttons: [
     {
       label: "View all Participants",
       action: "post",
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/participants`,
+    },
+    {
+      label: "Round 1",
+      action: "post",
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round1`,
+    },
+    {
+      label: "Round 2",
+      action: "post",
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round2`,
+    },
+    {
+      label: "Round 3",
+      action: "post",
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round3`,
     },
   ],
   postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/result`,
@@ -26,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_HOST}/contest.png`,
+        url: `${process.env.NEXT_PUBLIC_HOST}/api/images/results/winner`,
       },
     ],
   },

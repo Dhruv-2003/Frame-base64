@@ -1,10 +1,34 @@
 import { ImageResponse } from "@vercel/og";
+import { createPublicClient, http } from "viem";
+import { baseSepolia } from "viem/chains";
+import {
+  TOURANMENT_ABI,
+  TOURNAMENT_ADDRESS,
+} from "../../../../../constants/tournament";
 
 export const GET = async (req: Request) => {
+  const publicClient = createPublicClient({
+    chain: baseSepolia,
+    transport: http("https://sepolia.base.org"),
+  });
+
+  if (!publicClient) {
+    return;
+  }
+  const txdata = await publicClient.readContract({
+    address: TOURNAMENT_ADDRESS,
+    abi: TOURANMENT_ABI,
+    functionName: "getBracket",
+  });
+
+  const competitors = txdata[0];
+
   return new ImageResponse(
     (
-      <div className=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
-        <div className="absolute top-0 left-0 w-[640px]">
+      // Modified based on https://tailwindui.com/components/marketing/sections/cta-sections
+
+      <div tw="flex relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
+        <div tw="flex absolute top-0 left-0 w-[640px]">
           <svg
             width="640"
             height="280"
@@ -18,7 +42,7 @@ export const GET = async (req: Request) => {
             />
           </svg>
         </div>
-        <div className="absolute right-0 bottom-0 w-[800px]">
+        <div tw="flex absolute right-0 bottom-0 w-[800px]">
           <svg
             width="800"
             height="280"
@@ -33,27 +57,22 @@ export const GET = async (req: Request) => {
           </svg>
         </div>
 
-        <div className="flex-col z-10 pb-8 ">
+        <div tw="flex flex-col z-10 pb-8 ">
           <img
-            src={`${process.env.NEXT_PUBLIC_HOST}/farcaster.png`}
+            src={"https://frame-base64.vercel.app/farcaster.png"}
             alt="farcaster"
-            className="h-20 w-20"
+            tw="h-20 w-20"
           />
         </div>
-        <div className="flex-col text-white z-10 text-center space-y-4">
-          {/* <h1 className="text-4xl font-bold ">
-            Dad Joke Contest Participants!
-          </h1>
-          <div className="pt-4 text-black grid grid-cols-12 gap-4 mx-auto">
-            <div className=" bg-white rounded-xl p-3 col-span-4">Bob</div>
-            <div className=" bg-white rounded-xl p-3 col-span-4">Alice</div>
-            <div className=" bg-white rounded-xl p-3 col-span-4">Bob</div>
-            <div className=" bg-white rounded-xl p-3 col-span-4">Alice</div>
-            <div className=" bg-white rounded-xl p-3 col-span-4">Bob</div>
-            <div className=" bg-white rounded-xl p-3 col-span-4">Alice</div>
-            <div className=" bg-white rounded-xl p-3 col-span-6">Bob</div>
-            <div className=" bg-white rounded-xl p-3 col-span-6">Bob</div>
-          </div> */}
+        <div tw="flex flex-col text-white z-10 text-center space-y-4">
+          <h1 tw="text-4xl font-bold px-20">Dad Joke Contest Participants!</h1>
+          <div tw="flex flex-wrap pt-4 text-black grid grid-cols-12 gap-4 mx-auto">
+            {competitors.map((competitor) => (
+              <div tw="flex bg-white rounded-xl p-3 col-span-4 mx-2">
+                {Number(competitor)}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     ),

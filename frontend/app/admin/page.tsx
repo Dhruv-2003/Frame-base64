@@ -17,15 +17,18 @@ import {
   COMPPROVIDER_ABI,
   COMPPROVIDER_ADDRESS,
 } from "../../constants/compProvider";
+import { RESULTS_ABI, RESULTS_ADDRESS } from "../../constants/resultProvider";
 
 // admin functions
 // find entries and add in the tournament
 // advance the round
 // get results
 export default function Home() {
+  const currRound = 0;
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+  const [participantsVotes, setParticipantsVotes] = useState<bigint[][][]>();
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
@@ -170,14 +173,205 @@ export default function Home() {
 
       let promises: any[] = [];
 
-      participants.forEach((participant) => {
+      participants.forEach(async (participant) => {
         promises.push(getParticipantsEntry(participant));
       });
 
-      const participantsVotes = await Promise.all(promises);
+      const participantsVotes: bigint[][][] = await Promise.all(promises);
       console.log("Participants Votes", participantsVotes);
+      setParticipantsVotes(participantsVotes);
       // Array of participant's vote , which is in short an array of array's of the winners chosen for a round
       return participantsVotes;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const calculateVotesRound1 = async () => {
+    try {
+      let round1PVotes: bigint[][] = [];
+      if (!participantsVotes) {
+        return;
+      }
+
+      participantsVotes.forEach((participantVote) => {
+        round1PVotes.push(participantVote[currRound]);
+      });
+
+      console.log(round1PVotes);
+      let votes: { [key: number]: number } = {};
+      if (!publicClient) {
+        return;
+      }
+      const bracket = await publicClient.readContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "getBracket",
+      });
+      const competitors = bracket[currRound];
+      console.log(competitors);
+      competitors.forEach((competitor) => {
+        votes[Number(competitor)] = 0;
+      });
+      console.log(votes);
+
+      round1PVotes.forEach((pvote) => {
+        pvote.forEach((vote) => {
+          votes[Number(vote)] += 1;
+        });
+      });
+
+      console.log(votes);
+
+      let round1Winners: bigint[] = [];
+      let round1Losers: bigint[] = [];
+      let round1Metadata = ["match1", "match2", "match3", "match4"];
+
+      for (let i = 0; i < competitors.length; i += 2) {
+        if (votes[Number(competitors[i])] > votes[Number(competitors[i + 1])]) {
+          round1Winners.push(competitors[i]);
+          round1Losers.push(competitors[i + 1]);
+        } else {
+          round1Losers.push(competitors[i]);
+          round1Winners.push(competitors[i + 1]);
+        }
+      }
+
+      console.log(round1Winners, round1Losers, round1Metadata);
+      return {
+        round1Winners,
+        round1Losers,
+        round1Metadata,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const writeResultsRound1 = async () => {
+    try {
+      const data = await calculateVotesRound1();
+      if (!data) {
+        return;
+      }
+      if (!publicClient) {
+        return;
+      }
+      const txdata = await publicClient.simulateContract({
+        account,
+        address: RESULTS_ADDRESS,
+        abi: RESULTS_ABI,
+        functionName: "writeResults",
+        args: [data.round1Winners, data.round1Losers, data.round1Metadata],
+      });
+
+      if (!walletClient) {
+        return;
+      }
+
+      const tx = await walletClient.writeContract(txdata.request);
+      console.log("Transaction Sent");
+      const transaction = await publicClient.waitForTransactionReceipt({
+        hash: tx,
+      });
+
+      console.log(transaction);
+      console.log(txdata.result);
+
+      // write the results to the KV db too
+      data.round1Winners.forEach(async (winner, i) => {
+        const writeData = {
+          roundId: currRound + 1,
+          matchId: i + 1,
+          winnerFid: Number(winner),
+        };
+
+        const res = await fetch("/api/contest/results", {
+          method: "POST",
+          body: JSON.stringify(writeData),
+        });
+        console.log(res);
+      });
+
+      return {
+        transaction,
+        txdata,
+      };
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const advanceRound = async () => {
+    try {
+      if (!publicClient) {
+        console.log("No Wallet Detected");
+
+        return;
+      }
+      const data = await publicClient.simulateContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "advance",
+      });
+
+      if (!walletClient) {
+        console.log("No Wallet Detected");
+
+        return;
+      }
+
+      const tx = await walletClient.writeContract(data.request);
+      console.log("Transaction Sent");
+
+      const transaction = await publicClient.waitForTransactionReceipt({
+        hash: tx,
+      });
+      console.log(transaction);
+      console.log(data.result);
+
+      return {
+        transaction,
+        data,
+      };
+
+      // TODO : We have to store the rounds result in the KV db too ,so that while fetching for the image it just works
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const storeRoundData = async () => {
+    try {
+      if (!publicClient) {
+        return;
+      }
+      const txdata = await publicClient.readContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "getBracket",
+      });
+
+      console.log(txdata);
+
+      const roundParticipants = txdata[currRound];
+      for (let i = 0; i < roundParticipants.length; i += 2) {
+        // store this roundData
+        const roundData = {
+          roundId: currRound + 1,
+          matchId: i / 2 + 1,
+          fid1: Number(roundParticipants[i]),
+          fid2: Number(roundParticipants[i + 1]),
+        };
+        const res = await fetch("/api/contest/rounds", {
+          method: "POST",
+          body: JSON.stringify(roundData),
+        });
+        console.log(res);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -232,7 +426,38 @@ export default function Home() {
                 onClick={() => checkContract()}
                 className="bg-[#FFA500] p-3 rounded-md"
               >
+                get bracket
+              </button>
+              <button
+                onClick={() => getParticipantsVotes()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
                 Participants
+              </button>
+
+              <button
+                onClick={() => calculateVotesRound1()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
+                Calculate Round Votes
+              </button>
+              <button
+                onClick={() => writeResultsRound1()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
+                Write Round Votes
+              </button>
+              <button
+                onClick={() => advanceRound()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
+                Advance round
+              </button>
+              <button
+                onClick={() => storeRoundData()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
+                Store round Data
               </button>
             </>
           ) : (

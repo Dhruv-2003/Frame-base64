@@ -7,8 +7,8 @@ import satori from "satori";
 
 function Frame() {
   return (
-    <div tw=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
-      <div tw="absolute top-0 left-0 w-[640px]">
+    <div tw="flex relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
+      <div tw="flex absolute top-0 left-0 w-[640px]">
         <svg
           width="640"
           height="280"
@@ -22,7 +22,7 @@ function Frame() {
           />
         </svg>
       </div>
-      <div tw="absolute right-0 bottom-0 w-[800px]">
+      <div tw="flex absolute right-0 bottom-0 w-[800px]">
         <svg
           width="800"
           height="280"
@@ -37,33 +37,32 @@ function Frame() {
         </svg>
       </div>
 
-      <div tw="z-10 pb-8 ">
+      <div tw="flex flex-col z-10 pb-8 mt-3 ">
         <img
-          src="https://frame-base64.vercel.app/farcaster"
+          src={`https://frame-base64.vercel.app/farcaster.png`}
           alt="farcaster"
           tw="h-20 w-20"
         />
       </div>
-      <div tw=" text-white z-10 text-center space-y-4">
-        <h1 tw="text-4xl font-bold ">Round 1 Contest Between</h1>
-        <div tw=" w-full flex items-center justify-between py-6">
-          <div tw="space-y-5">
+      <div tw="flex flex-col items-center text-white z-10 text-center space-y-4">
+        <h1 tw="text-4xl font-bold ">Dad Joke Contest Winner 🏆</h1>
+        <div tw="w-full flex items-center justify-center py- ">
+          <div tw="flex flex-col">
             <img
               src="https://effigy.im/a/kushagrasarathe.eth.png"
               tw=" h-32 w-32 mx-auto"
               alt="avatar"
+              width={100}
+              height={100}
             />
 
-            <div tw=" bg-white rounded-xl p-3 text-black">Alice</div>
-          </div>
-          <div tw=" text-2xl font-semibold pb-6">v/s</div>
-          <div tw="space-y-5">
-            <img
-              src="https://effigy.im/a/0xdhruva.eth.png"
-              tw=" h-32 w-32 mx-auto"
-              alt="avatar"
-            />
-            <div tw=" bg-white rounded-xl p-3 text-black">Bob</div>
+            <div tw="flex flex-col bg-white max-w-3xl rounded-xl p-3 text-black my-4">
+              <span tw="mx-auto">Alice</span>
+              <span tw="mx-auto mt-4">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Consectetur hic necessitatibus rem aut esse soluta deleniti.
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -75,19 +74,18 @@ function Frame() {
 
 export async function GET(req: NextRequest) {
   // get the round number from the request , for which the image is needed , probably only possible with id method
-  const { searchParams } = new URL(req.url);
-  const round = searchParams.get("round");
-  const match = searchParams.get("match");
-  console.log(round, match);
 
-  const data = await kv.hgetall(`r-${round}:m-${match}`);
+  const data = await kv.hgetall(`r-3:m-1`);
   console.log(data);
 
   // get the round winner info from the contract first
-  if (data) {
+  if (data && data.winner && data.winner) {
+    // @ts-ignore¯
+    const entry = await kv.get(`${data.winner.fid}`);
+
     return new ImageResponse(
       (
-        <div tw="relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
+        <div tw="flex relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
           <div tw="flex absolute top-0 left-0 w-[640px]">
             <svg
               width="640"
@@ -102,7 +100,6 @@ export async function GET(req: NextRequest) {
               />
             </svg>
           </div>
-
           <div tw="flex absolute right-0 bottom-0 w-[800px]">
             <svg
               width="800"
@@ -118,53 +115,31 @@ export async function GET(req: NextRequest) {
             </svg>
           </div>
 
-          <div tw="flex z-10 pb-8 ">
+          <div tw="flex flex-col z-10 pb-8 mt-3 ">
             <img
-              src="https://frame-base64.vercel.app/farcaster.png"
+              src={`https://frame-base64.vercel.app/farcaster.png`}
               alt="farcaster"
               tw="h-20 w-20"
-              width={20}
-              height={20}
             />
           </div>
-
-          <div tw="flex flex-col text-white z-10 text-center space-y-4">
-            <h1 tw="text-4xl font-bold px-10">
-              Round {round} Contest {match} Between
-            </h1>
-            <div tw="w-full flex items-center justify-between py-6 px-20">
+          <div tw="flex flex-col items-center text-white z-10 text-center space-y-4">
+            <h1 tw="text-4xl font-bold ">Dad Joke Contest Winner 🏆</h1>
+            <div tw="w-full flex items-center justify-center py- ">
               <div tw="flex flex-col">
                 <img
-                  src={
-                    data
-                      ? data.user1.profileImage
-                      : "https://effigy.im/a/kushagrasarathe.eth.png"
-                  }
+                  src="https://effigy.im/a/kushagrasarathe.eth.png"
                   tw=" h-32 w-32 mx-auto"
                   alt="avatar"
                   width={100}
                   height={100}
                 />
 
-                <div tw="flex bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user1.displayName : "N/A"}
-                </div>
-              </div>
-              <div tw="flex text-2xl font-semibold pb-6 mx-10">v/s</div>
-              <div tw="flex flex-col space-y-5">
-                <img
-                  src={
-                    data
-                      ? data.user2.profileImage
-                      : "https://effigy.im/a/0xdhruva.eth.png"
-                  }
-                  tw=" h-32 w-32 mx-auto"
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                />
-                <div tw=" bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user2.displayName : "N/A"}
+                <div tw="flex flex-col bg-white max-w-3xl rounded-xl p-3 text-black my-4">
+                  {/* @ts-ignore */}
+                  <span tw="mx-auto">{data.winner.displayName}</span>
+
+                  {/* @ts-ignore */}
+                  <span tw="mx-auto mt-4">{entry}</span>
                 </div>
               </div>
             </div>
@@ -222,7 +197,7 @@ export async function GET(req: NextRequest) {
 
           <div tw="flex flex-col text-white z-10 text-center space-y-4">
             <h1 tw="text-4xl font-bold px-10">
-              Data Not Yet Available for Round {round} Contest {match}
+              Final Winner results not yet available
             </h1>
           </div>
         </div>

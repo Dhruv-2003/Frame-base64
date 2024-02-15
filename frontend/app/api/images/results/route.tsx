@@ -8,7 +8,7 @@ import satori from "satori";
 function Frame() {
   return (
     <div tw=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
-      <div tw="absolute top-0 left-0 w-[640px]">
+      <div tw="absolute flex top-0 left-0 w-[640px]">
         <svg
           width="640"
           height="280"
@@ -22,7 +22,7 @@ function Frame() {
           />
         </svg>
       </div>
-      <div tw="absolute right-0 bottom-0 w-[800px]">
+      <div tw="absolute flex right-0 bottom-0 w-[800px]">
         <svg
           width="800"
           height="280"
@@ -37,34 +37,26 @@ function Frame() {
         </svg>
       </div>
 
-      <div tw="z-10 pb-8 ">
+      <div tw="flex z-10 pb-8 ">
         <img
-          src="https://frame-base64.vercel.app/farcaster"
+          src="https://frame-base64.vercel.app/farcaster.png"
           alt="farcaster"
           tw="h-20 w-20"
+          width={20}
+          height={20}
         />
       </div>
-      <div tw=" text-white z-10 text-center space-y-4">
-        <h1 tw="text-4xl font-bold ">Round 1 Contest Between</h1>
-        <div tw=" w-full flex items-center justify-between py-6">
-          <div tw="space-y-5">
-            <img
-              src="https://effigy.im/a/kushagrasarathe.eth.png"
-              tw=" h-32 w-32 mx-auto"
-              alt="avatar"
-            />
-
-            <div tw=" bg-white rounded-xl p-3 text-black">Alice</div>
-          </div>
-          <div tw=" text-2xl font-semibold pb-6">v/s</div>
-          <div tw="space-y-5">
-            <img
-              src="https://effigy.im/a/0xdhruva.eth.png"
-              tw=" h-32 w-32 mx-auto"
-              alt="avatar"
-            />
-            <div tw=" bg-white rounded-xl p-3 text-black">Bob</div>
-          </div>
+      <div tw="flex flex-col text-white z-10 text-center space-y-6">
+        <h1 tw="text-4xl font-bold ">Round 1 Winner</h1>
+        <div tw="flex flex-col space-y-6">
+          <img
+            src="https://effigy.im/a/0xdhruva.eth.png"
+            tw=" h-32 w-32 mx-auto"
+            alt="avatar"
+            width={100}
+            height={100}
+          />
+          <div tw="bg-white rounded-xl p-3 text-black mx-25">Bob</div>
         </div>
       </div>
     </div>
@@ -84,11 +76,11 @@ export async function GET(req: NextRequest) {
   console.log(data);
 
   // get the round winner info from the contract first
-  if (data) {
+  if (data && data.winner) {
     return new ImageResponse(
       (
-        <div tw="relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
-          <div tw="flex absolute top-0 left-0 w-[640px]">
+        <div tw=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
+          <div tw="absolute flex top-0 left-0 w-[640px]">
             <svg
               width="640"
               height="280"
@@ -102,8 +94,7 @@ export async function GET(req: NextRequest) {
               />
             </svg>
           </div>
-
-          <div tw="flex absolute right-0 bottom-0 w-[800px]">
+          <div tw="absolute flex right-0 bottom-0 w-[800px]">
             <svg
               width="800"
               height="280"
@@ -127,45 +118,20 @@ export async function GET(req: NextRequest) {
               height={20}
             />
           </div>
-
-          <div tw="flex flex-col text-white z-10 text-center space-y-4">
-            <h1 tw="text-4xl font-bold px-10">
-              Round {round} Contest {match} Between
+          <div tw="flex flex-col text-white z-10 text-center space-y-6">
+            <h1 tw="text-4xl font-bold ">
+              Round {round} Match {match} Winner
             </h1>
-            <div tw="w-full flex items-center justify-between py-6 px-20">
-              <div tw="flex flex-col">
-                <img
-                  src={
-                    data
-                      ? data.user1.profileImage
-                      : "https://effigy.im/a/kushagrasarathe.eth.png"
-                  }
-                  tw=" h-32 w-32 mx-auto"
-                  alt="avatar"
-                  width={100}
-                  height={100}
-                />
-
-                <div tw="flex bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user1.displayName : "N/A"}
-                </div>
-              </div>
-              <div tw="flex text-2xl font-semibold pb-6 mx-10">v/s</div>
-              <div tw="flex flex-col space-y-5">
-                <img
-                  src={
-                    data
-                      ? data.user2.profileImage
-                      : "https://effigy.im/a/0xdhruva.eth.png"
-                  }
-                  tw=" h-32 w-32 mx-auto"
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                />
-                <div tw=" bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user2.displayName : "N/A"}
-                </div>
+            <div tw="flex flex-col space-y-6">
+              <img
+                src={data.winner.profileImage}
+                tw=" h-32 w-32 mx-auto"
+                alt="avatar"
+                width={100}
+                height={100}
+              />
+              <div tw="bg-white rounded-xl p-3 text-black mx-25">
+                {data.winner.displayName}
               </div>
             </div>
           </div>
@@ -222,7 +188,7 @@ export async function GET(req: NextRequest) {
 
           <div tw="flex flex-col text-white z-10 text-center space-y-4">
             <h1 tw="text-4xl font-bold px-10">
-              Data Not Yet Available for Round {round} Contest {match}
+              Results Not Yet Available for Round {round} Contest {match}
             </h1>
           </div>
         </div>

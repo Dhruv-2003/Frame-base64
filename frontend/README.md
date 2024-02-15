@@ -1,3 +1,15 @@
+## Results Frame
+
+Frame 1 - Finalist (winner) , View all participants , round1 , round2 , round3
+
+Frame 2 - Only participants , no button , Back
+
+Frame 3 - Round 1 Home pages , match1 , match2 , match3 , match4
+
+Frame 4 - Round 1 & Match 1 Participants Frame , View Winner , Back to Round Home
+
+Frame 5 - Round 1 & Match 1 Winner Frame , Back to Round 1 Home
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
