@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { Frame, getFrameFlattened } from "frames.js";
 import type { Metadata } from "next";
-import waves1 from "../../public/waves1.svg";
-import waves2 from "../../public/waves2.svg";
+import waves1 from "../../../public/waves1.svg";
+import waves2 from "../../../public/waves2.svg";
 
 // Declare the frame
 const initialFrame: Frame = {

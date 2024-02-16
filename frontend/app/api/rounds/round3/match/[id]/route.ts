@@ -21,7 +21,7 @@ export async function POST(
     if (Number(params.id) < 2) {
       const frame: Frame = {
         version: "vNext",
-        image: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        image: `${imageUrlBase}/api/images/contest/rounds?round=3&match=${params.id}`,
         buttons: [
           {
             label: `View Winner`,
@@ -34,7 +34,7 @@ export async function POST(
             target: `${process.env.NEXT_PUBLIC_HOST}/results`,
           },
         ],
-        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=3&match=${params.id}`,
         postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
       };
 

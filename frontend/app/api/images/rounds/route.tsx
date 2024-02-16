@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
   return new ImageResponse(
     (
       <div tw=" relative flex h-[476px] w-[910px] flex-col items-center justify-center border bg-[#121312] p-4">
-        <div tw="absolute flex top-0 left-0 w-[640px]">
+        <div tw="flex absolute top-0 left-0 w-[640px]">
           <svg
             width="640"
             height="280"
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
             />
           </svg>
         </div>
-        <div tw="absolute flex right-0 bottom-0 w-[800px]">
+        <div tw="flex absolute right-0 bottom-0 w-[800px]">
           <svg
             width="800"
             height="280"
@@ -115,18 +115,16 @@ export async function GET(req: NextRequest) {
           />
         </div>
         <div tw="flex flex-col text-white z-10 text-center space-y-6">
-          <h1 tw="text-4xl font-bold ">Round {round}</h1>
-          <div tw="flex flex-col space-y-6">
-            {/* <img
-              src={data.winner.profileImage}
-              tw=" h-32 w-32 mx-auto"
-              alt="avatar"
-              width={100}
-              height={100}
-            />
-            <div tw="bg-white rounded-xl p-3 text-black mx-25">
-              {data.winner.displayName}
-            </div> */}
+          <h1 tw="text-4xl font-bold px-30">Round {round} Details</h1>
+          <div tw="flex space-y-6">
+            {/* <div tw=" bg-white rounded-xl p-3 text-black"> */}
+            <p tw=" max-w-lg">
+              Welcome to the VIP lounge, where you hold the power to unveil the
+              chosen ones! With just a tap of your finger, you can reveal the
+              elite contenders of each round. Feel the rush of authority as you
+              decide who gets the spotlight next
+            </p>
+            {/* </div> */}
           </div>
         </div>
       </div>

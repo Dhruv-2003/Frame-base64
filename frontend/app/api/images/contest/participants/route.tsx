@@ -78,8 +78,8 @@ export const GET = async (req: Request) => {
         <div tw="flex flex-col text-white z-10 text-center space-y-4">
           <h1 tw="text-4xl font-bold px-20">Dad Joke Contest Participants!</h1>
           <div tw="flex flex-wrap pt-4 text-black grid grid-cols-12 gap-4 mx-auto">
-            {competitors.map((competitor) => (
-              <div tw="flex bg-white rounded-xl p-3 col-span-4 mx-2">
+            {competitors.map((competitor, i) => (
+              <div key={i} tw="flex bg-white rounded-xl p-3 col-span-4 mx-2">
                 {competitor?.displayName}
               </div>
             ))}

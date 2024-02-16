@@ -124,6 +124,7 @@ export async function GET(req: NextRequest) {
             </h1>
             <div tw="flex flex-col space-y-6">
               <img
+                // @ts-ignore
                 src={data.winner.profileImage}
                 tw=" h-32 w-32 mx-auto"
                 alt="avatar"
@@ -131,6 +132,7 @@ export async function GET(req: NextRequest) {
                 height={100}
               />
               <div tw="bg-white rounded-xl p-3 text-black mx-25">
+                {/* @ts-ignore */}
                 {data.winner.displayName}
               </div>
             </div>

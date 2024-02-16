@@ -137,7 +137,8 @@ export async function GET(req: NextRequest) {
                 <img
                   src={
                     data
-                      ? data.user1.profileImage
+                      ? // @ts-ignore
+                        data.user1.profileImage
                       : "https://effigy.im/a/kushagrasarathe.eth.png"
                   }
                   tw=" h-32 w-32 mx-auto"
@@ -147,7 +148,10 @@ export async function GET(req: NextRequest) {
                 />
 
                 <div tw="flex bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user1.displayName : "N/A"}
+                  {data
+                    ? // @ts-ignore
+                      data.user1.displayName
+                    : "N/A"}
                 </div>
               </div>
               <div tw="flex text-2xl font-semibold pb-6 mx-10">v/s</div>
@@ -155,7 +159,8 @@ export async function GET(req: NextRequest) {
                 <img
                   src={
                     data
-                      ? data.user2.profileImage
+                      ? // @ts-ignore
+                        data.user2.profileImage
                       : "https://effigy.im/a/0xdhruva.eth.png"
                   }
                   tw=" h-32 w-32 mx-auto"
@@ -164,7 +169,10 @@ export async function GET(req: NextRequest) {
                   height={32}
                 />
                 <div tw=" bg-white rounded-xl p-3 text-black my-3">
-                  {data ? data.user2.displayName : "N/A"}
+                  {data
+                    ? // @ts-ignore
+                      data.user2.displayName
+                    : "N/A"}
                 </div>
               </div>
             </div>
