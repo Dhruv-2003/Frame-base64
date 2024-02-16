@@ -19,36 +19,39 @@ export async function POST(
     console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
 
-    const frame: Frame = {
-      version: "vNext",
-      image: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
-      buttons: [
-        {
-          label: `View Winner`,
-          action: "post",
-          target: `${process.env.NEXT_PUBLIC_HOST}/`,
+    if (Number(params.id) < 3) {
+      const frame: Frame = {
+        version: "vNext",
+        image: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        buttons: [
+          {
+            label: `View Winner`,
+            action: "post",
+            target: `${process.env.NEXT_PUBLIC_HOST}/api/results/2/${params.id}`,
+          },
+          {
+            label: `🔙 Back`,
+            action: "post",
+            target: `${process.env.NEXT_PUBLIC_HOST}/results`,
+          },
+        ],
+        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
+      };
+
+      // Return the frame as HTML
+      const html = getFrameHtml(frame);
+
+      // or Wrong / Invalid Submission frame
+
+      return new Response(html, {
+        headers: {
+          "Content-Type": "text/html",
         },
-        {
-          label: `🔙 Back`,
-          action: "post",
-          target: `${process.env.NEXT_PUBLIC_HOST}/results`,
-        },
-      ],
-      ogImage: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
-      postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
-    };
-
-    // Return the frame as HTML
-    const html = getFrameHtml(frame);
-
-    // or Wrong / Invalid Submission frame
-
-    return new Response(html, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-      status: 200,
-    });
+        status: 200,
+      });
+    } else {
+    }
   } catch (error: any) {
     console.log(error);
     const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;

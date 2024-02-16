@@ -18,37 +18,40 @@ export async function POST(
     const frameMessage = await getFrameMessage(body);
     console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
+    if (Number(params.id) < 9) {
+      const frame: Frame = {
+        version: "vNext",
+        image: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        buttons: [
+          {
+            label: `View Winner`,
+            action: "post",
+            target: `${process.env.NEXT_PUBLIC_HOST}/api/results/1/${params.id}`,
+          },
+          {
+            label: `🔙 Back`,
+            action: "post",
+            target: `${process.env.NEXT_PUBLIC_HOST}/results`,
+          },
+        ],
+        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
+        postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
+      };
 
-    const frame: Frame = {
-      version: "vNext",
-      image: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
-      buttons: [
-        {
-          label: `View Winner`,
-          action: "post",
-          target: `${process.env.NEXT_PUBLIC_HOST}/`,
+      // Return the frame as HTML
+      const html = getFrameHtml(frame);
+
+      // or Wrong / Invalid Submission frame
+
+      return new Response(html, {
+        headers: {
+          "Content-Type": "text/html",
         },
-        {
-          label: `🔙 Back`,
-          action: "post",
-          target: `${process.env.NEXT_PUBLIC_HOST}/results`,
-        },
-      ],
-      ogImage: `${imageUrlBase}/api/images/contest/rounds?round=1&match=${params.id}`,
-      postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
-    };
-
-    // Return the frame as HTML
-    const html = getFrameHtml(frame);
-
-    // or Wrong / Invalid Submission frame
-
-    return new Response(html, {
-      headers: {
-        "Content-Type": "text/html",
-      },
-      status: 200,
-    });
+        status: 200,
+      });
+    } else {
+      // TODO , No rounds available
+    }
   } catch (error: any) {
     console.log(error);
     const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
