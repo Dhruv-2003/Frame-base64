@@ -23,8 +23,16 @@ import { RESULTS_ABI, RESULTS_ADDRESS } from "../../constants/resultProvider";
 // find entries and add in the tournament
 // advance the round
 // get results
+
+// [18085n, 5173n](2)[(258800n, 271797n)](2)[
+//   ("match 0 , votes-18085 : 7 , votes-258800 : 2",
+//   "match 1 , votes-271797 : 5 , votes-5173 : 6")
+// ];
+
+// [5173n]0: 5173nlength: 1[[Prototype]]: Array(0) [18085n] ['match 0 , votes-18085 : 2 , votes-5173 : 3']
+
 export default function Home() {
-  const currRound = 0;
+  const currRound = 1;
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
@@ -113,6 +121,38 @@ export default function Home() {
         functionName: "numRounds",
       });
       console.log(noRounds);
+      const currRound = await publicClient.readContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "curRound",
+      });
+      console.log(currRound);
+      const state = await publicClient.readContract({
+        account,
+        address: TOURNAMENT_ADDRESS,
+        abi: TOURANMENT_ABI,
+        functionName: "getState",
+      });
+      console.log(state);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getResults = async () => {
+    try {
+      if (!publicClient) {
+        return;
+      }
+      const txdata = await publicClient.readContract({
+        account,
+        address: RESULTS_ADDRESS,
+        abi: RESULTS_ABI,
+        functionName: "getResult",
+        args: [BigInt(18085), BigInt(251289)],
+      });
+
+      console.log(txdata);
     } catch (error) {
       console.log(error);
     }
@@ -266,26 +306,26 @@ export default function Home() {
       if (!publicClient) {
         return;
       }
-      const txdata = await publicClient.simulateContract({
-        account,
-        address: RESULTS_ADDRESS,
-        abi: RESULTS_ABI,
-        functionName: "writeResults",
-        args: [data.round1Winners, data.round1Losers, data.round1Metadata],
-      });
+      // const txdata = await publicClient.simulateContract({
+      //   account,
+      //   address: RESULTS_ADDRESS,
+      //   abi: RESULTS_ABI,
+      //   functionName: "writeResults",
+      //   args: [data.round1Winners, data.round1Losers, data.round1Metadata],
+      // });
 
-      if (!walletClient) {
-        return;
-      }
+      // if (!walletClient) {
+      //   return;
+      // }
 
-      const tx = await walletClient.writeContract(txdata.request);
-      console.log("Transaction Sent");
-      const transaction = await publicClient.waitForTransactionReceipt({
-        hash: tx,
-      });
+      // const tx = await walletClient.writeContract(txdata.request);
+      // console.log("Transaction Sent");
+      // const transaction = await publicClient.waitForTransactionReceipt({
+      //   hash: tx,
+      // });
 
-      console.log(transaction);
-      console.log(txdata.result);
+      // console.log(transaction);
+      // console.log(txdata.result);
 
       // write the results to the KV db too
       data.round1Winners.forEach(async (winner, i) => {
@@ -302,10 +342,10 @@ export default function Home() {
         console.log(res);
       });
 
-      return {
-        transaction,
-        txdata,
-      };
+      // return {
+      //   transaction,
+      //   txdata,
+      // };
     } catch (error) {
       console.error(error);
     }
@@ -517,6 +557,12 @@ export default function Home() {
                 className="bg-[#FFA500] p-3 rounded-md"
               >
                 Write Round Votes
+              </button>
+              <button
+                onClick={() => getResults()}
+                className="bg-[#FFA500] p-3 rounded-md"
+              >
+                Get Votes
               </button>
               <button
                 onClick={() => advanceRound()}

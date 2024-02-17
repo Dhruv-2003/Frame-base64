@@ -85,6 +85,7 @@ export async function GET(req: NextRequest) {
   if (data && data.winner && data.winner) {
     // @ts-ignore¯
     const entry = await kv.get(`${data.winner.fid}`);
+    console.log(entry);
 
     return new ImageResponse(
       (
@@ -130,7 +131,12 @@ export async function GET(req: NextRequest) {
             <div tw="w-full flex items-center justify-center py- ">
               <div tw="flex flex-col">
                 <img
-                  src="https://effigy.im/a/kushagrasarathe.eth.png"
+                  src={
+                    data.winner
+                      ? // @ts-ignore
+                        data.winner.profileImage
+                      : "https://effigy.im/a/kushagrasarathe.eth.png"
+                  }
                   tw=" h-32 w-32 mx-auto"
                   alt="avatar"
                   width={100}

@@ -48,7 +48,10 @@ export async function POST(request: NextRequest) {
 
     const data = {
       ...roundData,
-      winner: winnerData,
+      winner: {
+        ...winnerData,
+        fid: winnerFid,
+      },
     };
 
     await kv.hset(`r-${roundId}:m-${matchId}`, data);

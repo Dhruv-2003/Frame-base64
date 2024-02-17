@@ -134,7 +134,7 @@ export async function GET(req: NextRequest) {
                 width={100}
                 height={100}
               />
-              <div tw="bg-white rounded-xl p-3 text-black mx-25">
+              <div tw="bg-white rounded-xl p-3 text-black mx-25 mt-3">
                 {/* @ts-ignore */}
                 {data.winner.displayName}
               </div>
