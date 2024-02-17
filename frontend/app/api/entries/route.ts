@@ -8,6 +8,8 @@ import { NextRequest } from "next/server";
 import { kv } from "@vercel/kv";
 import { getCompetitorEntries } from "../../../utils/kv";
 
+// Get entry function to get all the entries in the contest
+
 export async function GET(request: NextRequest) {
   try {
     const { userIds, entries } = await getCompetitorEntries();
@@ -19,6 +21,8 @@ export async function GET(request: NextRequest) {
     return new Response(error, { status: 500 });
   }
 }
+
+// set Entry function , to add a new user entry to tournament
 
 export async function POST(request: NextRequest) {
   try {

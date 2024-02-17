@@ -72,6 +72,9 @@ function Frame() {
 
 // http//localhost:3000/api/images/contest/rounds?round=1&match=1
 
+// Final Winner Default Results Frame image
+// Shows the final winner for competitors
+
 export async function GET(req: NextRequest) {
   // get the round number from the request , for which the image is needed , probably only possible with id method
 

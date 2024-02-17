@@ -7,6 +7,9 @@ import {
 } from "../../../../../constants/tournament";
 import { UserDataReturnType, getUserDataForFid } from "frames.js";
 
+// ALl pariticipants Frame Image
+// Shows all the  participants by fetching the name
+
 export const GET = async (req: Request) => {
   const publicClient = createPublicClient({
     chain: baseSepolia,

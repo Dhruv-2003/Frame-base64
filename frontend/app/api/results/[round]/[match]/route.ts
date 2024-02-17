@@ -12,11 +12,11 @@ export async function POST(
 ) {
   try {
     const body = await request.json();
-    console.log(body);
+    // console.log(body);
 
     const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
     const frameMessage = await getFrameMessage(body);
-    console.log(frameMessage);
+    // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
 
     const frame: Frame = {

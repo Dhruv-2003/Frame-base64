@@ -65,6 +65,9 @@ function Frame() {
 
 // http//localhost:3000/api/images/contest/rounds?round=1&match=1
 
+// Round Result Frame
+// Shows the winner of  a particular round and contest
+
 export async function GET(req: NextRequest) {
   // get the round number from the request , for which the image is needed , probably only possible with id method
   const { searchParams } = new URL(req.url);

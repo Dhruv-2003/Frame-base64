@@ -8,6 +8,8 @@ import {
 import { NextRequest } from "next/server";
 import { kv } from "@vercel/kv";
 
+// Get winner results from the KV
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -30,6 +32,8 @@ export async function GET(request: NextRequest) {
     return new Response(error, { status: 500 });
   }
 }
+
+// add results into the KV db
 
 export async function POST(request: NextRequest) {
   try {
