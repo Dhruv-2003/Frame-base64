@@ -64,7 +64,7 @@ export async function POST(
           action: "post",
         },
       ],
-      postUrl: `${process.env.NEXT_PUBLIC_HOST}`,
+      postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
     };
 
     // Return the frame as HTML
