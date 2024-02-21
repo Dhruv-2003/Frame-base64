@@ -26,11 +26,11 @@ export async function POST(
         {
           label: `🔙 Back`,
           action: "post",
-          target: `${process.env.NEXT_PUBLIC_HOST}/results`,
+          target: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
         },
       ],
       ogImage: `${imageUrlBase}/api/images/results?round=${params.round}&match=${params.match}`,
-      postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
+      postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
     };
 
     // Return the frame as HTML

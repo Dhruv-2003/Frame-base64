@@ -31,7 +31,7 @@ export async function POST(
           {
             label: `🔙 Back`,
             action: "post",
-            target: `${process.env.NEXT_PUBLIC_HOST}/results`,
+            target: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
           },
         ],
         ogImage: `${imageUrlBase}/api/images/contest/rounds?round=${params.round}&match=${params.id}`,

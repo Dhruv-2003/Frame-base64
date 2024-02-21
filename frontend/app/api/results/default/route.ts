@@ -6,43 +6,48 @@ import {
 } from "frames.js";
 import { NextRequest } from "next/server";
 
-// Participants Frame
-// This frame is used to display the participants of the contest
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    // console.log(body);
+    console.log(body);
 
-    // Parse and validate the frame message
-    // const { isValid, message } = await validateFrameMessage(body);
-    // console.log(message);
-    // if (!isValid || !message) {
-    //   return new Response("Invalid message", { status: 400 });
-    // }
+    const buttonIndex = body.untrustedData.buttonIndex;
+    console.log(buttonIndex);
 
-    const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
     const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
-
     const frame: Frame = {
+      image: `${process.env.NEXT_PUBLIC_HOST}/api/images/results/winner`,
       version: "vNext",
-      image: `${imageUrlBase}/api/images/contest/participants`,
       buttons: [
         {
-          label: `🔙 Back`,
+          label: "View all Participants",
           action: "post",
+          target: `${process.env.NEXT_PUBLIC_HOST}/api/participants`,
+        },
+        {
+          label: "Round 1",
+          action: "post",
+          target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/1`,
+        },
+        {
+          label: "Round 2",
+          action: "post",
+          target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/2`,
+        },
+        {
+          label: "Round 3",
+          action: "post",
+          target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/3`,
         },
       ],
-      ogImage: `${imageUrlBase}/api/images/contest/participants`,
-      postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
+      postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results`,
+      ogImage: `${process.env.NEXT_PUBLIC_HOST}/api/images/results/winner`,
     };
 
     // Return the frame as HTML
     const html = getFrameHtml(frame);
-
-    // or Wrong / Invalid Submission frame
 
     return new Response(html, {
       headers: {
