@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const targetURLBase = `${process.env.NEXT_PUBLIC_HOST}/api`;
     let finalURL = "";
-    const frameMessage = await getFrameMessage(body);
+    // const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
 
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
           },
         ],
         ogImage: `${imageUrlBase}/api/images/contest/participants`,
-        postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
+        postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results/default`,
       };
 
       // Return the frame as HTML

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const buttonIndex = body.untrustedData.buttonIndex;
     console.log(buttonIndex);
 
-    const frameMessage = await getFrameMessage(body);
+    // const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
     const frame: Frame = {

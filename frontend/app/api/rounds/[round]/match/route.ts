@@ -18,7 +18,7 @@ export async function POST(
     console.log(buttonIndex);
 
     const imageUrlBase = `${process.env.NEXT_PUBLIC_HOST}`;
-    const frameMessage = await getFrameMessage(body);
+    // const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
     if (Number(buttonIndex) < 5) {
