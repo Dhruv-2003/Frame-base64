@@ -19,20 +19,20 @@ const initialFrame: Frame = {
     {
       label: "Round 1",
       action: "post",
-      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round1`,
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/1`,
     },
     {
       label: "Round 2",
       action: "post",
-      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round2`,
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/2`,
     },
     {
       label: "Round 3",
       action: "post",
-      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/round3`,
+      target: `${process.env.NEXT_PUBLIC_HOST}/api/rounds/3`,
     },
   ],
-  postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/result`,
+  postUrl: `${process.env.NEXT_PUBLIC_HOST}/api/results`,
 };
 
 // Export Next.js metadata

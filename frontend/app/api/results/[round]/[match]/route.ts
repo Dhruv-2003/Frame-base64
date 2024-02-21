@@ -35,6 +35,7 @@ export async function POST(
 
     // Return the frame as HTML
     const html = getFrameHtml(frame);
+    console.log(html);
 
     // or Wrong / Invalid Submission frame
 

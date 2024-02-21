@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { round: string; id: string } }
 ) {
   try {
     const body = await request.json();
@@ -18,16 +18,15 @@ export async function POST(
     const frameMessage = await getFrameMessage(body);
     // console.log(frameMessage);
     // TODO :  Need to check if the total entry is already 8 , if yes return an unsuccessful frame
-
-    if (Number(params.id) < 3) {
+    if (Number(params.id) < 5) {
       const frame: Frame = {
         version: "vNext",
-        image: `${imageUrlBase}/api/images/contest/rounds?round=2&match=${params.id}`,
+        image: `${imageUrlBase}/api/images/contest/rounds?round=${params.round}&match=${params.id}`,
         buttons: [
           {
             label: `View Winner`,
             action: "post",
-            target: `${process.env.NEXT_PUBLIC_HOST}/api/results/2/${params.id}`,
+            target: `${process.env.NEXT_PUBLIC_HOST}/api/results/${params.round}/${params.id}`,
           },
           {
             label: `🔙 Back`,
@@ -35,7 +34,7 @@ export async function POST(
             target: `${process.env.NEXT_PUBLIC_HOST}/results`,
           },
         ],
-        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=2&match=${params.id}`,
+        ogImage: `${imageUrlBase}/api/images/contest/rounds?round=${params.round}&match=${params.id}`,
         postUrl: `${process.env.NEXT_PUBLIC_HOST}/results`,
       };
 
@@ -50,7 +49,6 @@ export async function POST(
         },
         status: 200,
       });
-    } else {
     }
   } catch (error: any) {
     console.log(error);

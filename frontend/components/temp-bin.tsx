@@ -323,3 +323,46 @@
 // // {`:)`}
 // // </div> */
 // // } -->
+
+// 0
+// :
+// {addr: '0x54a4A021C2FA8A5d5D5B9272e488E2654591c8e6', points: 8n}
+// 1
+// :
+// {addr: '0x898d0DBd5850e086E6C09D2c83A26Bb5F1ff8C33', points: 6n}
+// 2
+// :
+// {addr: '0x5Dc9C45Fbd38910b84D789C53b1269779abC4e36', points: 5n}
+// 3
+// :
+// {addr: '0x3039e4a4a540F35ae03A09f3D5A122c49566f919', points: 5n}
+// 4
+// :
+// {addr: '0x41D22F2e55BD7B6bbb16f82e852a58c36C5D5Cf8', points: 5n}
+// 5
+// :
+// {addr: '0xe22eCBbA8fB9C0124eeCb6AfE0bf6A487424989f', points: 5n}
+// 6
+// :
+// {addr: '0x62C43323447899acb61C18181e34168903E033Bf', points: 4n}
+// 7
+// :
+// {addr: '0x4C131C0b663C7E15A7b6DF6695fEBC908E32E260', points: 4n}
+// 8
+// :
+// {addr: '0xa075Ec31f2bFd7977Ba3FB9C61c814Ce466E8f9a', points: 4n}
+// 9
+// :
+// {addr: '0xfB01b5397E39D10108c1343cA8C27e9B4036beEF', points: 4n}
+// 10
+// :
+// {addr: '0x87eF4726e87a685F882861c3f14D397e293a1a5f', points: 4n}
+// 11
+// :
+// {addr: '0xb5463A49BCe74778db3f498900BEba299f5beEa8', points: 4n}
+// 12
+// :
+// {addr: '0xaaD963485b93aD21A088d0365c410446F2859564', points: 3n}
+// length
+// :
+// 13

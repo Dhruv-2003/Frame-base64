@@ -32,7 +32,7 @@ import { RESULTS_ABI, RESULTS_ADDRESS } from "../../constants/resultProvider";
 // [5173n]0: 5173nlength: 1[[Prototype]]: Array(0) [18085n] ['match 0 , votes-18085 : 2 , votes-5173 : 3']
 
 export default function Home() {
-  const currRound = 1;
+  const currRound = 2;
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
