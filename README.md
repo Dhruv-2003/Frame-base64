@@ -1,6 +1,6 @@
-# Frames64 - Hackathon Project
+# Frames64
 
-Welcome to Frames64, a cutting-edge platform where the magic of Frames meets the thrill of competition! 🎉
+Welcome to Frames64, a platform where the magic of Frames meets the thrill of competition! 🎉
 
 ## Overview
 
